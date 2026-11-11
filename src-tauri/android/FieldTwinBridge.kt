@@ -1,0 +1,310 @@
+package app.deliverytwin.teal
+
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.webkit.JavascriptInterface
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import org.json.JSONArray
+import org.json.JSONObject
+
+// Everything the Field Twin page can ask the phone for, reached from JavaScript as window.FieldTwinNative.
+class FieldTwinBridge(private val activity: Activity) {
+
+  companion object {
+    const val PERM_CODE = 4417
+    @Volatile var helloSeen = false
+    @Volatile var web: android.webkit.WebView? = null
+
+    fun takeIntent(ctx: Context, intent: Intent?) {
+      if (intent == null) return
+      val fromExtra = intent.getStringExtra("ft_action")
+      val fromLink = intent.data?.host
+      val action = fromExtra ?: fromLink
+      if (action == "odo") FieldTwinState.prefs(ctx).edit().putString("pendingAction", "odo").apply()
+    }
+
+    fun hasLocation(ctx: Context): Boolean =
+      ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+        ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    fun askAndStart(activity: Activity) {
+      val need = mutableListOf<String>()
+      if (!hasLocation(activity)) {
+        need.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        need.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+      }
+      if (Build.VERSION.SDK_INT >= 33 &&
+        ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        need.add(Manifest.permission.POST_NOTIFICATIONS)
+      }
+      if (need.isEmpty()) startIfAllowed(activity)
+      else ActivityCompat.requestPermissions(activity, need.toTypedArray(), PERM_CODE)
+    }
+
+    // Asks Android once to leave Field Twin out of battery saving so tracking keeps running with the screen off.
+    fun askBatteryOnce(ctx: Context) {
+      try {
+        val pm = ctx.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+        if (pm.isIgnoringBatteryOptimizations(ctx.packageName)) return
+        val p = FieldTwinState.prefs(ctx)
+        if (p.getBoolean("batteryAsked", false)) return
+        p.edit().putBoolean("batteryAsked", true).apply()
+        val i = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, android.net.Uri.parse("package:" + ctx.packageName))
+        if (ctx !is Activity) i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        ctx.startActivity(i)
+      } catch (e: Exception) {}
+    }
+
+    fun isBatteryFree(ctx: Context): Boolean = try {
+      (ctx.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager).isIgnoringBatteryOptimizations(ctx.packageName)
+    } catch (e: Exception) { false }
+
+    fun startIfAllowed(ctx: Context) {
+      if (!hasLocation(ctx)) return
+      if (!FieldTwinState.prefs(ctx).getBoolean("trackingOn", true)) return
+      try {
+        val i = Intent(ctx, FieldTwinTrackService::class.java)
+        ContextCompat.startForegroundService(ctx, i)
+        askBatteryOnce(ctx)
+      } catch (e: Exception) {
+        FieldTwinState.prefs(ctx).edit().putString("lastError", e.toString()).apply()
+      }
+    }
+  }
+
+  @JavascriptInterface
+  fun hello(): String {
+    helloSeen = true
+    return "field-twin-native-1"
+  }
+
+  @JavascriptInterface
+  fun isTracking(): Boolean = FieldTwinState.prefs(activity).getBoolean("trackingOn", true)
+
+  @JavascriptInterface
+  fun setTracking(on: Boolean) {
+    FieldTwinState.prefs(activity).edit().putBoolean("trackingOn", on).apply()
+    activity.runOnUiThread {
+      if (on) askAndStart(activity)
+      else activity.stopService(Intent(activity, FieldTwinTrackService::class.java))
+    }
+  }
+
+  @JavascriptInterface
+  fun hasPermission(): Boolean = hasLocation(activity)
+
+  @JavascriptInterface
+  fun lastFix(): String = FieldTwinState.prefs(activity).getString("lastFix", "") ?: ""
+
+  @JavascriptInterface
+  fun getStays(): String = FieldTwinState.prefs(activity).getString("stays", "[]") ?: "[]"
+
+  @JavascriptInterface
+  fun openStay(): String = FieldTwinState.prefs(activity).getString("openStay", "") ?: ""
+
+  @JavascriptInterface
+  fun ackStays(idsJson: String) {
+    synchronized(FieldTwinState.lock) {
+      val ids = HashSet<String>()
+      try {
+        val a = JSONArray(idsJson)
+        for (i in 0 until a.length()) ids.add(a.getString(i))
+      } catch (e: Exception) { return }
+      val p = FieldTwinState.prefs(activity)
+      val old = try { JSONArray(p.getString("stays", "[]")) } catch (e: Exception) { JSONArray() }
+      val keep = JSONArray()
+      for (i in 0 until old.length()) {
+        val o = old.optJSONObject(i) ?: continue
+        if (!ids.contains(o.optString("id"))) keep.put(o)
+      }
+      p.edit().putString("stays", keep.toString()).apply()
+    }
+  }
+
+  @JavascriptInterface
+  fun dayMiles(day: String): Double {
+    val m = FieldTwinState.dayMeters(activity)
+    return Math.round(m.optDouble(day, 0.0) / 1609.344 * 10.0) / 10.0
+  }
+
+  @JavascriptInterface
+  fun takeAction(): String {
+    val p = FieldTwinState.prefs(activity)
+    val a = p.getString("pendingAction", "") ?: ""
+    if (a.isNotEmpty()) p.edit().remove("pendingAction").apply()
+    return a
+  }
+
+  @JavascriptInterface
+  fun odoDue(): Boolean = FieldTwinState.prefs(activity).getLong("odoDueSince", 0L) > 0L && !FieldTwinState.odoSnoozed(activity)
+
+  @JavascriptInterface
+  fun snoozeOdo(minutes: Int) {
+    FieldTwinState.snoozeOdo(activity, minutes)
+  }
+
+  @JavascriptInterface
+  fun odoSaved() {
+    FieldTwinState.odoSaved(activity)
+  }
+
+  @JavascriptInterface
+  fun getPromptSettings(): String = FieldTwinState.promptSettings(activity).toString()
+
+  @JavascriptInterface
+  fun setPromptSettings(json: String) {
+    FieldTwinState.prefs(activity).edit().putString("promptSettings", json).apply()
+    FieldTwinState.scheduleNextPrompt(activity)
+  }
+
+  // Sends a POST from the phone itself instead of the page, so servers that only allow the website's
+  // address still answer the app. The answer comes back through window.__ftHttpDone(id, status, text).
+  @JavascriptInterface
+  fun httpSend(id: String, method: String, url: String, headersJson: String, body: String) {
+    Thread {
+      var code = 0
+      var text = ""
+      try {
+        val c = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+        c.requestMethod = method
+        c.connectTimeout = 20000
+        c.readTimeout = 120000
+        c.doOutput = method == "POST" || method == "PUT"
+        val h = JSONObject(headersJson)
+        val it = h.keys()
+        while (it.hasNext()) { val k = it.next(); c.setRequestProperty(k, h.getString(k)) }
+        if (c.doOutput) c.outputStream.use { it.write(body.toByteArray(Charsets.UTF_8)) }
+        code = c.responseCode
+        val stream = if (code >= 400) c.errorStream else c.inputStream
+        text = stream?.bufferedReader()?.use { it.readText() } ?: ""
+        c.disconnect()
+      } catch (e: Exception) {
+        code = 0
+        text = e.toString()
+      }
+      val js = "window.__ftHttpDone && window.__ftHttpDone(" + JSONObject.quote(id) + "," + code + "," + JSONObject.quote(text) + ")"
+      activity.runOnUiThread { try { web?.evaluateJavascript(js, null) } catch (e: Exception) {} }
+    }.start()
+  }
+
+  @JavascriptInterface
+  fun trackMode(): String = FieldTwinState.prefs(activity).getString("trackMode", "moving") ?: "moving"
+
+  @JavascriptInterface
+  fun setHome(json: String) {
+    FieldTwinState.prefs(activity).edit().putString("home", json).apply()
+  }
+
+  @JavascriptInterface
+  fun promptNow() {
+    FieldTwinState.prefs(activity).edit().putLong("nextPromptAt", System.currentTimeMillis()).apply()
+  }
+
+  @JavascriptInterface
+  fun gpsAt(t: Double): Double = synchronized(FieldTwinState.lock) { FieldTwinState.gpsAt(activity, t.toLong()) }
+
+  @JavascriptInterface
+  fun gpsNow(): Double = FieldTwinState.gpsTotal(activity)
+
+  @JavascriptInterface
+  fun batteryFree(): Boolean = isBatteryFree(activity)
+
+  @JavascriptInterface
+  fun lastError(): String = FieldTwinState.prefs(activity).getString("lastError", "") ?: ""
+
+  // Opens a link in the app that owns it, such as Google Maps for a driving route.
+  @JavascriptInterface
+  fun enterPip(): Boolean {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
+    var ok = true
+    activity.runOnUiThread {
+      try {
+        val p = android.app.PictureInPictureParams.Builder().setAspectRatio(android.util.Rational(3, 4)).build()
+        ok = activity.enterPictureInPictureMode(p)
+      } catch (e: Exception) { ok = false }
+    }
+    return ok
+  }
+
+  @JavascriptInterface
+  fun companionStart() { activity.runOnUiThread { FieldTwinCompanion.start(activity) } }
+
+  @JavascriptInterface
+  fun companionStop() { FieldTwinCompanion.stop() }
+
+  @JavascriptInterface
+  fun companionSend(cmd: String) { FieldTwinCompanion.send(cmd) }
+
+  @JavascriptInterface
+  fun companionState(): String = FieldTwinCompanion.state
+
+  @JavascriptInterface
+  fun hasCamera(): Boolean = ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+
+  // Shows Android's camera permission prompt. Taking a photo from the page fails silently until this is allowed.
+  @JavascriptInterface
+  fun askCamera() {
+    activity.runOnUiThread {
+      try { ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), 4418) } catch (e: Exception) {}
+    }
+  }
+
+  @JavascriptInterface
+  fun isPip(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInPictureInPictureMode
+
+  // Floating window size in page units, as "width,height".
+  @JavascriptInterface
+  fun pipSize(): String {
+    val c = activity.resources.configuration
+    return c.screenWidthDp.toString() + "," + c.screenHeightDp.toString()
+  }
+
+  @JavascriptInterface
+  fun setAutoPip(on: Boolean) {
+    FieldTwinState.prefs(activity).edit().putBoolean("autoPip", on).apply()
+  }
+
+  @JavascriptInterface
+  fun openUrl(url: String) {
+    if (!url.startsWith("https://")) return
+    activity.runOnUiThread {
+      try {
+        val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url))
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        activity.startActivity(i)
+      } catch (e: Exception) {}
+    }
+  }
+
+  // Writes an export or spreadsheet into the phone's Downloads folder, since the app's web view cannot download files itself.
+  @JavascriptInterface
+  fun saveFile(name: String, mime: String, text: String): String {
+    return try {
+      val safe = name.replace(Regex("[^A-Za-z0-9._-]"), "-")
+      val bytes = text.toByteArray(Charsets.UTF_8)
+      if (Build.VERSION.SDK_INT >= 29) {
+        val values = android.content.ContentValues().apply {
+          put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, safe)
+          put(android.provider.MediaStore.MediaColumns.MIME_TYPE, mime)
+          put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS)
+        }
+        val resolver = activity.contentResolver
+        val uri = resolver.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, values) ?: return "error: the phone would not create the file"
+        val out = resolver.openOutputStream(uri) ?: return "error: the phone would not open the file"
+        out.use { it.write(bytes) }
+        "ok"
+      } else {
+        val dir = activity.getExternalFilesDir(android.os.Environment.DIRECTORY_DOWNLOADS) ?: return "error: no downloads folder"
+        java.io.File(dir, safe).writeBytes(bytes)
+        "ok " + dir.absolutePath
+      }
+    } catch (e: Exception) {
+      "error: " + (e.message ?: "unknown")
+    }
+  }
+}
