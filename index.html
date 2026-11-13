@@ -898,9 +898,9 @@
   <h3>Companion screen</h3>
   <button class="secondary tg native-only" id="companionBtn" aria-pressed="false" hidden><span>FT Companion</span><i class="tg-sw" aria-hidden="true"></i></button>
   <div class="hz-label native-only" id="companionText" hidden>Off.</div>
-  <h3>Lockers</h3>
-  <button class="secondary tg" id="teamLockersBtn" aria-pressed="false"><span>All lockers</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <button class="secondary" id="lockersBtn">Lockers</button>
+  <h3 style="display:none">Lockers</h3>
+  <button class="secondary tg" id="teamLockersBtn" aria-pressed="false" style="display:none"><span>All lockers</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary" id="lockersBtn" style="display:none">Lockers</button>
   <h3>Look things up</h3>
   <button class="secondary" id="searchBtn">Search</button>
   <button class="secondary" id="timelineBtn">Timeline</button>
@@ -944,8 +944,11 @@
     <button class="secondary" id="camKeyBtn">Service address</button>
     <button class="secondary" id="checkBtn">Service check</button>
   </div>
-  <h3>Color key</h3>
-  <div id="legendRows"></div>
+  <h3>Games</h3>
+  <button class="secondary" id="fieldDispatchBtn" onclick="window.open('https://2026-11-04-field-dispatch.vercel.app/', '_blank', 'noopener')">Field Dispatch</button>
+  <h3>Map</h3>
+  <button class="secondary" id="legendBtn" onclick="var r = document.getElementById('legendRows'); r.style.display = r.style.display === 'none' ? 'block' : 'none';">Color key</button>
+  <div id="legendRows" style="display:none"></div>
 </div>
 
 <div id="mapFilterBar"><span id="mapFilterText"></span><button class="secondary" id="mapFilterClear" style="padding:8px 10px;font-size:11px;">Show all</button></div>
@@ -1047,7 +1050,7 @@ function signHtml(key, iconChar, size) {
     '<span style="display:flex;transform:translateY(' + Math.round(shift * k) + 'px);">' + iconSvg(CATEGORIES[key] ? key : 'general', g, '#ffffff') + '</span></div>';
 }
 
-const ICON_CHOICES = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && k !== 'receipt').sort((a, b) => CATEGORIES[a].label.localeCompare(CATEGORIES[b].label));
+const ICON_CHOICES = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && k !== 'amazon_locker' && k !== 'receipt').sort((a, b) => CATEGORIES[a].label.localeCompare(CATEGORIES[b].label));
 const FALLBACK_ICON = CATEGORIES.general.icon;
 let selectedIcon = FALLBACK_ICON;
 const MIN_SAVE_INTERVAL_MS = 30000;
@@ -1752,7 +1755,7 @@ function territorySpan(list) {
 }
 
 function computeTrophies(stats, list) {
-  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief');
+  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && k !== 'amazon_locker');
   const distinctCats = catKeys.filter(k => stats.categoryCounts[k]).length;
   const span = territorySpan(list);
   return [
@@ -1947,7 +1950,7 @@ function buildSearchPage() {
   const page = document.getElementById('searchPage');
   if (page.getAttribute('data-built')) return;
   let cats = '<option value="">All types</option>';
-  Object.keys(CATEGORIES).forEach(k => {
+  Object.keys(CATEGORIES).filter(k => k !== 'amazon_locker').forEach(k => {
     cats += '<option value="' + k + '">' + CATEGORIES[k].label + '</option>';
   });
   let html = '<div class="sq-head"><div class="title">[ SEARCH ]</div><button class="secondary" id="sqClose">Close</button></div>';
@@ -5338,7 +5341,7 @@ function profileHtml() {
   html += '<div class="meta-line">' + span + ' miles of ground covered</div>';
 
   html += '<div class="question">Categories</div>';
-  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief');
+  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && k !== 'amazon_locker');
   catKeys.forEach(k => {
     const n = stats.categoryCounts[k] || 0;
     const m = CATEGORIES[k];
@@ -5704,7 +5707,7 @@ function showEntry(entry, fromHistory) {
   html += ftphGridHtml(ftphFor(entry.id), 'More photos');
   html += '<button class="secondary" id="entryAddPhoto" style="width:100%;margin-top:8px;">Add photo</button>';
   const lockerHere = hasPos(entry) ? ftpNear(entry.lat, entry.lon, 80, 'locker') : null;
-  html += '<div class="panel-actions"><button id="editEntryBtn">Edit</button>' + (hasPos(entry) ? '<button class="secondary" id="lockerPageBtn">' + (lockerHere ? 'Locker page' : 'Make locker') + '</button>' : '') + '<button class="secondary" id="closeEntryBtn">' + (fromHistory ? 'Back' : 'Close') + '</button></div>';
+  html += '<div class="panel-actions"><button id="editEntryBtn">Edit</button>' + (hasPos(entry) ? '<button class="secondary" id="lockerPageBtn" style="display:none">' + (lockerHere ? 'Locker page' : 'Make locker') + '</button>' : '') + '<button class="secondary" id="closeEntryBtn">' + (fromHistory ? 'Back' : 'Close') + '</button></div>';
   panel.innerHTML = html;
   ftphFill(panel);
   document.getElementById('entryAddPhoto').addEventListener('click', () => ftphPick(async d => {
