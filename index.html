@@ -876,9 +876,9 @@
   <h3>Delivery</h3>
   <button class="secondary" id="logOfferBtn">Log offer</button>
   <button class="secondary" id="offersBtn">Offers</button>
-  <h3>Food spots</h3>
-  <button class="secondary tg" id="dtFoodBtn" aria-pressed="false"><span>Food spots on map</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <button class="secondary" id="addFoodSpotBtn">Add food spot</button>
+  <h3>Spots</h3>
+  <button class="secondary tg" id="dtFoodBtn" aria-pressed="false"><span>Spots on map</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary" id="addFoodSpotBtn">Add spot</button>
   <h3>Capture</h3>
   <button class="secondary" id="receiptBtn">Receipt</button>
   <button class="secondary tg" id="milesToggleBtn" aria-pressed="false"><span>Odometer</span><i class="tg-sw" aria-hidden="true"></i></button>
@@ -4753,91 +4753,112 @@ document.getElementById('offerDockBtn').addEventListener('click', showOfferForm)
 document.getElementById('logOfferBtn').addEventListener('click', () => { dtCloseMenu(); showOfferForm(); });
 document.getElementById('offersBtn').addEventListener('click', () => { dtCloseMenu(); showOffers(); });
 
-// Delivery Twin food spots: chain and drive-thru spots from OpenStreetMap, plus spots drivers add by hand.
-let dtFoodOn = localStorage.getItem('dtFoodOn') === '1';
+// Delivery Twin spots: every known food and liquor spot shows as a small gray square until a driver confirms a delivery there.
+let dtFoodOn = localStorage.getItem('dtFoodOn') !== '0';
 let dtFoodLayer = null;
 let dtFoodTimer = null;
 let dtFoodBusy = false;
-const DT_OVERPASS = 'https://overpass-api.de/api/interpreter';
+let dtFoodSeen = {};
+let dtCanvas = null;
 
-function dtFoodColor(s) {
-  if (s.source === 'added') return '#2e9e4f';
-  if (s.drive_thru) return '#e8710a';
-  return '#0b4ea2';
-}
+const DtSquare = L.CircleMarker.extend({
+  _updatePath: function () {
+    const r = this._renderer;
+    if (!r._drawing || this._empty()) return;
+    const p = this._point, ctx = r._ctx, s = this._radius;
+    ctx.beginPath();
+    ctx.rect(p.x - s, p.y - s, s * 2, s * 2);
+    r._fillStroke(ctx, this);
+  }
+});
 
-function dtFoodPopup(s) {
+function dtSpotLines(s) {
   const bits = ['<b>' + escapeHtml(s.name || 'Unnamed') + '</b>'];
   if (s.brand && s.brand !== s.name) bits.push(escapeHtml(s.brand));
-  if (s.address) bits.push(escapeHtml(s.address));
+  if (s.category) bits.push(escapeHtml(String(s.category).replace(/_/g, ' ')));
+  const addr = [s.address, s.city, s.zip].filter(Boolean).join(', ');
+  if (addr) bits.push(escapeHtml(addr));
+  if (s.phone) bits.push(escapeHtml(s.phone));
+  if (s.website) bits.push(escapeHtml(String(s.website).replace(/^https?:\/\//, '').replace(/\/$/, '')));
+  if (s.hours) bits.push(escapeHtml(s.hours));
   bits.push(s.drive_thru === true ? 'Drive-thru' : s.drive_thru === false ? 'No drive-thru' : 'Drive-thru not known');
   if (s.gig_apps && s.gig_apps.length) bits.push('Apps: ' + escapeHtml(s.gig_apps.join(', ')));
-  if (s.hours) bits.push(escapeHtml(s.hours));
   if (s.notes) bits.push(escapeHtml(s.notes));
-  bits.push(s.source === 'added' ? 'Added by a driver' : 'From OpenStreetMap');
-  const btn = s.source === 'added'
-    ? (cloudUser && s.user_id === cloudUser.id ? '<button class="secondary" data-dtedit="' + escapeHtml(s.id) + '" style="margin-top:6px;">Edit</button>' : '')
-    : '<button class="secondary" data-dtosm="' + escapeHtml(s.id) + '" style="margin-top:6px;">Add details</button>';
-  return '<div style="font-size:14px;line-height:1.4;">' + bits.join('<br>') + btn + '</div>';
+  return bits;
 }
-
-let dtFoodSeen = {};
 
 async function dtFoodLoad() {
   if (!dtFoodOn || !map || dtFoodBusy) return;
-  if (map.getZoom() < 12) { setStatus('Zoom in to see food spots'); if (dtFoodLayer) dtFoodLayer.clearLayers(); return; }
+  if (!(sb && cloudUser)) { setStatus('Sign in to see spots'); return; }
   dtFoodBusy = true;
-  const b = map.getBounds();
-  const s = b.getSouth(), w = b.getWest(), n = b.getNorth(), e = b.getEast();
-  const spots = [];
-  const linked = {};
-  if (sb && cloudUser) {
-    try {
-      const res = await sb.from('delivery_twin_food_spots').select('*').gte('lat', s).lte('lat', n).gte('lng', w).lte('lng', e).limit(2000);
-      (res.data || []).forEach(r => { spots.push(r); if (r.source_ref) linked[r.source_ref] = true; });
-    } catch (err) {}
-  }
   try {
-    const box = s + ',' + w + ',' + n + ',' + e;
-    const q = '[out:json][timeout:25];(' +
-      'nwr["amenity"="fast_food"](' + box + ');' +
-      'nwr["amenity"~"^(restaurant|cafe|ice_cream)$"]["drive_through"="yes"](' + box + ');' +
-      ');out center tags 1500;';
-    const r = await fetch(DT_OVERPASS, { method: 'POST', body: 'data=' + encodeURIComponent(q), headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-    const j = await r.json();
-    (j.elements || []).forEach(el => {
-      const t = el.tags || {};
-      const ref = 'osm:' + el.type + '/' + el.id;
-      if (linked[ref]) return;
-      const lat = el.lat !== undefined ? el.lat : el.center && el.center.lat;
-      const lng = el.lon !== undefined ? el.lon : el.center && el.center.lon;
-      if (lat === undefined || lng === undefined) return;
-      const addr = [[t['addr:housenumber'], t['addr:street']].filter(Boolean).join(' '), t['addr:city']].filter(Boolean).join(', ');
-      spots.push({
-        id: ref, source: 'osm', source_ref: ref, name: t.name || t.brand || 'Unnamed', brand: t.brand || '',
-        category: t.amenity || '', lat: lat, lng: lng, address: addr,
-        drive_thru: t.drive_through === 'yes' ? true : t.drive_through === 'no' ? false : null,
-        hours: t.opening_hours || '', gig_apps: null, notes: ''
-      });
+    const b = map.getBounds();
+    const res = await sb.rpc('dt_spot_dots', { s: b.getSouth(), w: b.getWest(), n: b.getNorth(), e: b.getEast() });
+    if (res.error) { setStatus('Spots failed, ' + String(res.error.message).slice(0, 80)); return; }
+    if (!dtCanvas) dtCanvas = L.canvas({ padding: 0.3 });
+    if (!dtFoodLayer) dtFoodLayer = L.layerGroup().addTo(map);
+    dtFoodLayer.clearLayers();
+    dtFoodSeen = {};
+    let open = 0;
+    const big = map.getZoom() >= 15;
+    (res.data || []).forEach(d => {
+      dtFoodSeen[d.id] = d;
+      if (d.revealed) open++;
+      const m = d.revealed
+        ? new DtSquare([d.lat, d.lng], { renderer: dtCanvas, radius: big ? 6 : 4, color: '#0a1b2e', weight: 1.5, fillColor: d.kind === 'liquor' ? '#8e44ad' : '#2e9e4f', fillOpacity: 1 })
+        : new DtSquare([d.lat, d.lng], { renderer: dtCanvas, radius: big ? 3 : 2, stroke: false, fillColor: '#8a939c', fillOpacity: 0.55 });
+      m.on('click', () => dtSpotTap(d, m));
+      m.addTo(dtFoodLayer);
     });
+    setStatus((res.data || []).length + ' spots here, ' + open + ' uncovered');
   } catch (err) {
-    setStatus('OpenStreetMap is busy, showing driver spots only');
+    setStatus('Spots failed to load');
+  } finally {
+    dtFoodBusy = false;
   }
-  if (!dtFoodLayer) dtFoodLayer = L.layerGroup().addTo(map);
-  dtFoodLayer.clearLayers();
-  dtFoodSeen = {};
-  spots.forEach(sp => {
-    dtFoodSeen[sp.id] = sp;
-    L.circleMarker([sp.lat, sp.lng], { radius: 7, color: '#0a1b2e', weight: 2, fillColor: dtFoodColor(sp), fillOpacity: 0.9 })
-      .bindPopup(dtFoodPopup(sp)).addTo(dtFoodLayer);
-  });
-  setStatus(spots.length + ' food spots here');
-  dtFoodBusy = false;
+}
+
+async function dtSpotTap(d, m) {
+  if (!d.revealed) {
+    m.bindPopup('<div style="font-size:14px;line-height:1.4;">Something is here.<br><button data-dtgot="' + escapeHtml(d.id) + '" style="margin-top:6px;">Got a delivery here</button></div>').openPopup();
+    return;
+  }
+  const res = await sb.from('delivery_twin_food_spots').select('*').eq('id', d.id).limit(1);
+  const s = res.data && res.data[0];
+  if (!s) return;
+  dtFoodSeen[d.id] = Object.assign({}, d, s);
+  const btn = s.source === 'added' && s.user_id === cloudUser.id
+    ? '<button class="secondary" data-dtedit="' + escapeHtml(s.id) + '" style="margin-top:6px;">Edit</button>'
+    : '<button class="secondary" data-dtgot="' + escapeHtml(s.id) + '" style="margin-top:6px;">Another delivery here</button>';
+  m.bindPopup('<div style="font-size:14px;line-height:1.4;">' + dtSpotLines(s).join('<br>') + btn + '</div>').openPopup();
+}
+
+async function dtReveal(id) {
+  const last = dtOffersLoad()[0];
+  const app = last && last.app ? last.app : '';
+  const res = await sb.rpc('dt_reveal', { spot: id, app: app });
+  if (res.error) { setStatus('Could not save, ' + String(res.error.message).slice(0, 80)); return; }
+  const s = res.data && res.data[0];
+  if (map) map.closePopup();
+  const panel = document.getElementById('panel');
+  let html = '<h2>Spot uncovered</h2>';
+  if (s) html += '<div class="meta-line">' + dtSpotLines(s).join('</div><div class="meta-line">') + '</div>';
+  if (app) html += '<div class="meta-line">Delivery logged for ' + escapeHtml(app) + '</div>';
+  try {
+    const c = await sb.rpc('dt_reveal_count');
+    if (c.data && c.data[0]) html += '<div class="question">You have uncovered ' + c.data[0].revealed + ' spots</div>';
+  } catch (e) {}
+  html += '<div class="panel-actions"><button class="secondary" id="dtRevealClose">Close</button></div>';
+  panel.innerHTML = html;
+  panel.scrollTop = 0;
+  panel.classList.add('open');
+  document.getElementById('dtRevealClose').addEventListener('click', closePanel);
+  dtFoodLoad();
 }
 
 function dtFoodSoon() {
   clearTimeout(dtFoodTimer);
-  dtFoodTimer = setTimeout(dtFoodLoad, 800);
+  dtFoodTimer = setTimeout(dtFoodLoad, 600);
 }
 
 function dtFoodSet(on) {
@@ -4852,8 +4873,9 @@ function showFoodSpotForm(base) {
   const panel = document.getElementById('panel');
   const s = base || {};
   const editing = s.source === 'added' && s.id;
-  let html = '<h2>' + (editing ? 'Edit food spot' : 'Add food spot') + '</h2>';
-  html += '<div class="meta-line">Anywhere that sells food or lets drivers pick up food.</div>';
+  let html = '<h2>' + (editing ? 'Edit spot' : 'Add spot') + '</h2>';
+  html += '<div class="meta-line">Anywhere that sells food or drinks or lets drivers pick up an order.</div>';
+  html += '<label class="hz-label" for="fsKind">Kind</label><select id="fsKind"><option value="food"' + (s.kind !== 'liquor' ? ' selected' : '') + '>Food</option><option value="liquor"' + (s.kind === 'liquor' ? ' selected' : '') + '>Liquor</option></select>';
   html += '<label class="hz-label" for="fsName">Name</label><input type="text" id="fsName" value="' + escapeHtml(s.name || '') + '">';
   html += '<label class="hz-label" for="fsBrand">Chain, leave empty if independent</label><input type="text" id="fsBrand" value="' + escapeHtml(s.brand || '') + '">';
   html += '<label class="hz-label" for="fsAddr">Address</label><input type="text" id="fsAddr" value="' + escapeHtml(s.address || '') + '">';
@@ -4871,7 +4893,7 @@ function showFoodSpotForm(base) {
   panel.classList.add('open');
   document.getElementById('fsClose').addEventListener('click', closePanel);
   document.getElementById('fsSave').addEventListener('click', async () => {
-    if (!(sb && cloudUser)) { setStatus('Sign in first to save food spots'); return; }
+    if (!(sb && cloudUser)) { setStatus('Sign in first to save spots'); return; }
     const name = document.getElementById('fsName').value.trim();
     if (!name) { setStatus('Give the spot a name'); return; }
     let lat = s.lat, lng = s.lng;
@@ -4885,8 +4907,9 @@ function showFoodSpotForm(base) {
     const dv = document.getElementById('fsDrive').value;
     const row = {
       id: editing ? s.id : 'f' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      source: 'added', source_ref: editing ? (s.source_ref || null) : (s.source === 'osm' ? s.source_ref : null),
-      user_id: cloudUser.id, name: name, brand: document.getElementById('fsBrand').value.trim() || null,
+      source: 'added', source_ref: editing ? (s.source_ref || null) : null,
+      user_id: cloudUser.id, kind: document.getElementById('fsKind').value, name: name,
+      brand: document.getElementById('fsBrand').value.trim() || null,
       category: s.category || null, lat: lat, lng: lng, address: document.getElementById('fsAddr').value.trim() || null,
       drive_thru: dv === 'yes' ? true : dv === 'no' ? false : null,
       gig_apps: document.getElementById('fsApps').value.split(',').map(x => x.trim()).filter(Boolean),
@@ -4896,13 +4919,13 @@ function showFoodSpotForm(base) {
     const res = await sb.from('delivery_twin_food_spots').upsert(row, { onConflict: 'id' });
     if (res.error) { setStatus('Save failed, ' + String(res.error.message).slice(0, 80)); return; }
     closePanel();
-    setStatus('Food spot saved');
+    setStatus('Spot saved');
     if (!dtFoodOn) dtFoodSet(true); else dtFoodLoad();
   });
   if (editing) document.getElementById('fsDelete').addEventListener('click', async () => {
     await sb.from('delivery_twin_food_spots').delete().eq('id', s.id);
     closePanel();
-    setStatus('Food spot deleted');
+    setStatus('Spot deleted');
     dtFoodLoad();
   });
 }
@@ -4910,10 +4933,11 @@ function showFoodSpotForm(base) {
 document.getElementById('dtFoodBtn').addEventListener('click', () => { dtFoodSet(!dtFoodOn); });
 document.getElementById('addFoodSpotBtn').addEventListener('click', () => { dtCloseMenu(); showFoodSpotForm(null); });
 document.addEventListener('click', ev => {
-  const a = ev.target.closest && ev.target.closest('[data-dtosm],[data-dtedit]');
+  const g = ev.target.closest && ev.target.closest('[data-dtgot]');
+  if (g) { dtReveal(g.getAttribute('data-dtgot')); return; }
+  const a = ev.target.closest && ev.target.closest('[data-dtedit]');
   if (!a) return;
-  const id = a.getAttribute('data-dtosm') || a.getAttribute('data-dtedit');
-  const sp = dtFoodSeen[id];
+  const sp = dtFoodSeen[a.getAttribute('data-dtedit')];
   if (!sp) return;
   if (map) map.closePopup();
   showFoodSpotForm(sp);
