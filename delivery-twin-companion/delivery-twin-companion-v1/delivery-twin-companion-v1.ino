@@ -1,6 +1,6 @@
-// Field Twin Companion v1
-// Dashboard screen for Field Twin on the Waveshare ESP32-C6-LCD-1.47 (ST7789, 172 x 320, portrait).
-// It pairs with the Field Twin phone app over Bluetooth Low Energy as "FT Companion", shows the same view as the
+// Delivery Twin Companion v1
+// Dashboard screen for Delivery Twin on the Waveshare ESP32-C6-LCD-1.47 (ST7789, 172 x 320, portrait).
+// It pairs with the Delivery Twin phone app over Bluetooth Low Energy as "FT Companion", shows the same view as the
 // floating map window (next turn, distance, route, your position), reads its own GPS so the phone can leave its GPS
 // off, and measures road roughness with an accelerometer. Everything is controlled from the phone; no buttons needed.
 //
@@ -46,7 +46,7 @@
 #define UUID_POS "b2f0a001-6c1e-4f2a-9d4b-667477000003"
 #define UUID_ROAD "b2f0a001-6c1e-4f2a-9d4b-667477000004"
 
-// Colors, light theme with Field Twin blue
+// Colors, light theme with Delivery Twin blue
 #define C_WHITE 0xFFFF
 #define C_INK 0x08C5
 #define C_BLUE 0x0A74
@@ -558,7 +558,7 @@ static void drawScreen() {
     distText(dl, b, sizeof(b));
     gfx->setTextSize(1); gfx->setTextColor(C_GREY); gfx->setCursor(6, 94); gfx->print(b); if (dl >= 0) gfx->print(" to go");
   } else {
-    gfx->setTextSize(2); gfx->setTextColor(C_INK); gfx->setCursor(6, 8); gfx->print("FIELD TWIN");
+    gfx->setTextSize(2); gfx->setTextColor(C_INK); gfx->setCursor(6, 8); gfx->print("DELIVERY TWIN");
     gfx->setTextColor(C_BLUE); gfx->setCursor(6, 30); gfx->print("COMPANION");
     gfx->setTextSize(4); gfx->setTextColor(C_INK); gfx->setCursor(6, 58);
     gfx->print((int)roundf(mySpeed * 2.23694f));

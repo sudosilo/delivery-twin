@@ -17,10 +17,10 @@ import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
 
-// USB cable link to the Field Twin Companion board, through an OTG adapter. The board's own USB port shows up as a
+// USB cable link to the Delivery Twin Companion board, through an OTG adapter. The board's own USB port shows up as a
 // serial line. Commands go down one per line and its GPS and road readings come back one per line, the same text as
 // over Bluetooth. No ADB is involved; Android talks to the board directly.
-object FieldTwinCompanionUsb {
+object DeliveryTwinCompanionUsb {
   private const val ACTION = "app.deliverytwin.teal.COMPANION_USB_PERMISSION"
   private const val ESPRESSIF = 0x303A
   private val main = Handler(Looper.getMainLooper())
@@ -104,7 +104,7 @@ object FieldTwinCompanionUsb {
     c.controlTransfer(0x21, 0x20, 0, ifNum, coding, coding.size, 1000)
     c.controlTransfer(0x21, 0x22, 0x01, ifNum, null, 0, 1000)
     conn = c; dataIf = d; commIf = cIf; epIn = inEp; epOut = outEp; open = true
-    FieldTwinCompanion.usbState(true)
+    DeliveryTwinCompanion.usbState(true)
     val t = Thread {
       val buf = ByteArray(512)
       val line = StringBuilder()
@@ -114,7 +114,7 @@ object FieldTwinCompanionUsb {
         if (n > 0) {
           for (k in 0 until n) {
             val ch = (buf[k].toInt() and 0xFF).toChar()
-            if (ch == '\n' || ch == '\r') { if (line.isNotEmpty()) { FieldTwinCompanion.fromUsb(line.toString()); line.setLength(0) } }
+            if (ch == '\n' || ch == '\r') { if (line.isNotEmpty()) { DeliveryTwinCompanion.fromUsb(line.toString()); line.setLength(0) } }
             else if (line.length < 400) line.append(ch)
           }
         }
@@ -143,6 +143,6 @@ object FieldTwinCompanionUsb {
     try { conn?.close() } catch (e: Exception) {}
     conn = null; dataIf = null; commIf = null; epIn = null; epOut = null
     asked = false
-    FieldTwinCompanion.usbState(false)
+    DeliveryTwinCompanion.usbState(false)
   }
 }

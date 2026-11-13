@@ -25,14 +25,14 @@ import androidx.core.app.NotificationCompat
 import org.json.JSONArray
 import org.json.JSONObject
 
-// Runs while Field Twin tracking is on: watches location, turns long parks into stops,
+// Runs while Delivery Twin tracking is on: watches location, turns long parks into stops,
 // adds up GPS miles per day, and nags for an odometer reading at random times.
-class FieldTwinTrackService : Service(), LocationListener {
+class DeliveryTwinTrackService : Service(), LocationListener {
 
   companion object {
     const val RUN_NOTE_ID = 7701
-    const val CH_RUN = "fieldtwin_tracking"
-    const val CH_ODO = "fieldtwin_odometer"
+    const val CH_RUN = "deliverytwin_tracking"
+    const val CH_ODO = "deliverytwin_odometer"
     const val STAY_MS = 20L * 60L * 1000L
     const val STAY_RADIUS_M = 150f
     const val TICK_MS = 60L * 1000L
@@ -78,12 +78,12 @@ class FieldTwinTrackService : Service(), LocationListener {
       stopSelf()
       return START_NOT_STICKY
     }
-    parked = FieldTwinState.prefs(this).getString("trackMode", "moving") == "parked"
+    parked = DeliveryTwinState.prefs(this).getString("trackMode", "moving") == "parked"
     startLocation()
     handler.removeCallbacks(tick)
     handler.post(tick)
-    val p = FieldTwinState.prefs(this)
-    if (p.getLong("nextPromptAt", 0L) == 0L) FieldTwinState.scheduleNextPrompt(this)
+    val p = DeliveryTwinState.prefs(this)
+    if (p.getLong("nextPromptAt", 0L) == 0L) DeliveryTwinState.scheduleNextPrompt(this)
     return START_STICKY
   }
 
@@ -96,7 +96,7 @@ class FieldTwinTrackService : Service(), LocationListener {
 
   @SuppressLint("MissingPermission")
   private fun startLocation() {
-    if (!FieldTwinBridge.hasLocation(this)) return
+    if (!DeliveryTwinBridge.hasLocation(this)) return
     val m = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     lm = m
     try { m.removeUpdates(this) } catch (e: Exception) {}
@@ -138,7 +138,7 @@ class FieldTwinTrackService : Service(), LocationListener {
   private fun goParked() {
     if (parked) return
     parked = true
-    FieldTwinState.prefs(this).edit().putString("trackMode", "parked").putLong("lastInside", System.currentTimeMillis()).apply()
+    DeliveryTwinState.prefs(this).edit().putString("trackMode", "parked").putLong("lastInside", System.currentTimeMillis()).apply()
     startLocation()
   }
 
@@ -147,7 +147,7 @@ class FieldTwinTrackService : Service(), LocationListener {
     parked = false
     moveAnchor = null
     // Departure time: the stay ends when motion is first noticed, not when GPS gets its first fix.
-    FieldTwinState.prefs(this).edit().putString("trackMode", "moving").putLong("lastInside", System.currentTimeMillis()).apply()
+    DeliveryTwinState.prefs(this).edit().putString("trackMode", "moving").putLong("lastInside", System.currentTimeMillis()).apply()
     startLocation()
   }
 
@@ -169,7 +169,7 @@ class FieldTwinTrackService : Service(), LocationListener {
 
   // While parked: a network fix far from the parked spot wakes GPS back up, for phones whose motion sensor missed it.
   private fun parkedFix(loc: Location) {
-    val p = FieldTwinState.prefs(this)
+    val p = DeliveryTwinState.prefs(this)
     val fix = JSONObject()
     val acc = if (loc.hasAccuracy()) loc.accuracy else 999f
     fix.put("lat", loc.latitude); fix.put("lon", loc.longitude); fix.put("acc", acc.toDouble())
@@ -197,8 +197,8 @@ class FieldTwinTrackService : Service(), LocationListener {
   private fun handleFix(loc: Location) {
     val now = System.currentTimeMillis()
     val acc = if (loc.hasAccuracy()) loc.accuracy else 999f
-    synchronized(FieldTwinState.lock) {
-      val p = FieldTwinState.prefs(this)
+    synchronized(DeliveryTwinState.lock) {
+      val p = DeliveryTwinState.prefs(this)
       val e = p.edit()
       val fix = JSONObject()
       fix.put("lat", loc.latitude); fix.put("lon", loc.longitude); fix.put("acc", acc.toDouble())
@@ -212,15 +212,15 @@ class FieldTwinTrackService : Service(), LocationListener {
         val d = dist(prev.getDouble("lat"), prev.getDouble("lon"), loc.latitude, loc.longitude)
         val secs = ((now - prev.getLong("t")) / 1000L).coerceAtLeast(1L)
         if (d > 25f && d / secs < 60f) {
-          val dm = FieldTwinState.dayMeters(this)
-          val k = FieldTwinState.dayKey(now)
+          val dm = DeliveryTwinState.dayMeters(this)
+          val k = DeliveryTwinState.dayKey(now)
           dm.put(k, dm.optDouble(k, 0.0) + d)
           val keys = dm.keys().asSequence().toList().sorted()
           if (keys.size > 120) keys.take(keys.size - 120).forEach { dm.remove(it) }
           e.putString("dayMeters", dm.toString())
           e.putFloat("metersSinceStop", p.getFloat("metersSinceStop", 0f) + d)
           e.putString("lastGood", fix.toString())
-          FieldTwinState.addGpsMeters(this, e, now, d.toDouble())
+          DeliveryTwinState.addGpsMeters(this, e, now, d.toDouble())
         } else if (d > 25f) {
           e.putString("lastGood", fix.toString())
         }
@@ -257,8 +257,8 @@ class FieldTwinTrackService : Service(), LocationListener {
 
   private fun onTick() {
     val now = System.currentTimeMillis()
-    synchronized(FieldTwinState.lock) {
-      val p = FieldTwinState.prefs(this)
+    synchronized(DeliveryTwinState.lock) {
+      val p = DeliveryTwinState.prefs(this)
       val anchor = try { JSONObject(p.getString("anchor", "") ?: "") } catch (x: Exception) { null }
       val open = p.getString("openStay", "") ?: ""
       if (anchor != null && open.isEmpty() && now - anchor.getLong("t") >= STAY_MS) {
@@ -274,26 +274,26 @@ class FieldTwinTrackService : Service(), LocationListener {
   }
 
   private fun checkOdometerPrompt(now: Long) {
-    val p = FieldTwinState.prefs(this)
-    val s = FieldTwinState.promptSettings(this)
+    val p = DeliveryTwinState.prefs(this)
+    val s = DeliveryTwinState.promptSettings(this)
     val dueSince = p.getLong("odoDueSince", 0L)
-    if (FieldTwinState.atHome(this)) {
-      if (dueSince == 0L && now >= p.getLong("nextPromptAt", 0L)) FieldTwinState.scheduleNextPrompt(this)
+    if (DeliveryTwinState.atHome(this)) {
+      if (dueSince == 0L && now >= p.getLong("nextPromptAt", 0L)) DeliveryTwinState.scheduleNextPrompt(this)
       return
     }
     if (dueSince == 0L) {
       val next = p.getLong("nextPromptAt", 0L)
-      if (next == 0L) { FieldTwinState.scheduleNextPrompt(this); return }
+      if (next == 0L) { DeliveryTwinState.scheduleNextPrompt(this); return }
       if (now < next) return
-      if (!FieldTwinState.inWindow(this, now)) {
-        if (now - next > 60L * 60000L) FieldTwinState.scheduleNextPrompt(this)
+      if (!DeliveryTwinState.inWindow(this, now)) {
+        if (now - next > 60L * 60000L) DeliveryTwinState.scheduleNextPrompt(this)
         return
       }
       p.edit().putLong("odoDueSince", now).putLong("lastNagAt", now).apply()
       postOdometerNote(false)
       return
     }
-    if (FieldTwinState.odoSnoozed(this)) return
+    if (DeliveryTwinState.odoSnoozed(this)) return
     val nagMs = s.optInt("nag", 10).coerceAtLeast(2) * 60000L
     if (now - p.getLong("lastNagAt", 0L) >= nagMs) {
       p.edit().putLong("lastNagAt", now).apply()
@@ -322,14 +322,14 @@ class FieldTwinTrackService : Service(), LocationListener {
       .setAutoCancel(false)
       .setContentIntent(openAppIntent("odo"))
       .build()
-    try { nm.notify(FieldTwinState.ODO_NOTE_ID, n) } catch (e: Exception) { saveError(e) }
+    try { nm.notify(DeliveryTwinState.ODO_NOTE_ID, n) } catch (e: Exception) { saveError(e) }
   }
 
   private fun runningNote(): Notification =
     NotificationCompat.Builder(this, CH_RUN)
       .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-      .setContentTitle("Field Twin is logging stops and miles")
-      .setContentText("Turn off Auto track in the Field Twin menu to stop.")
+      .setContentTitle("Delivery Twin is logging stops and miles")
+      .setContentText("Turn off Auto track in the Delivery Twin menu to stop.")
       .setColor(0xFF1265C9.toInt())
       .setPriority(NotificationCompat.PRIORITY_LOW)
       .setOngoing(true)
@@ -344,6 +344,6 @@ class FieldTwinTrackService : Service(), LocationListener {
   }
 
   private fun saveError(e: Exception) {
-    try { FieldTwinState.prefs(this).edit().putString("lastError", e.toString()).apply() } catch (x: Exception) {}
+    try { DeliveryTwinState.prefs(this).edit().putString("lastError", e.toString()).apply() } catch (x: Exception) {}
   }
 }

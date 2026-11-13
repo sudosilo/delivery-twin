@@ -12,8 +12,8 @@ import androidx.core.content.ContextCompat
 import org.json.JSONArray
 import org.json.JSONObject
 
-// Everything the Field Twin page can ask the phone for, reached from JavaScript as window.FieldTwinNative.
-class FieldTwinBridge(private val activity: Activity) {
+// Everything the Delivery Twin page can ask the phone for, reached from JavaScript as window.DeliveryTwinNative.
+class DeliveryTwinBridge(private val activity: Activity) {
 
   companion object {
     const val PERM_CODE = 4417
@@ -25,7 +25,7 @@ class FieldTwinBridge(private val activity: Activity) {
       val fromExtra = intent.getStringExtra("ft_action")
       val fromLink = intent.data?.host
       val action = fromExtra ?: fromLink
-      if (action == "odo") FieldTwinState.prefs(ctx).edit().putString("pendingAction", "odo").apply()
+      if (action == "odo") DeliveryTwinState.prefs(ctx).edit().putString("pendingAction", "odo").apply()
     }
 
     fun hasLocation(ctx: Context): Boolean =
@@ -46,12 +46,12 @@ class FieldTwinBridge(private val activity: Activity) {
       else ActivityCompat.requestPermissions(activity, need.toTypedArray(), PERM_CODE)
     }
 
-    // Asks Android once to leave Field Twin out of battery saving so tracking keeps running with the screen off.
+    // Asks Android once to leave Delivery Twin out of battery saving so tracking keeps running with the screen off.
     fun askBatteryOnce(ctx: Context) {
       try {
         val pm = ctx.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
         if (pm.isIgnoringBatteryOptimizations(ctx.packageName)) return
-        val p = FieldTwinState.prefs(ctx)
+        val p = DeliveryTwinState.prefs(ctx)
         if (p.getBoolean("batteryAsked", false)) return
         p.edit().putBoolean("batteryAsked", true).apply()
         val i = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, android.net.Uri.parse("package:" + ctx.packageName))
@@ -66,13 +66,13 @@ class FieldTwinBridge(private val activity: Activity) {
 
     fun startIfAllowed(ctx: Context) {
       if (!hasLocation(ctx)) return
-      if (!FieldTwinState.prefs(ctx).getBoolean("trackingOn", true)) return
+      if (!DeliveryTwinState.prefs(ctx).getBoolean("trackingOn", true)) return
       try {
-        val i = Intent(ctx, FieldTwinTrackService::class.java)
+        val i = Intent(ctx, DeliveryTwinTrackService::class.java)
         ContextCompat.startForegroundService(ctx, i)
         askBatteryOnce(ctx)
       } catch (e: Exception) {
-        FieldTwinState.prefs(ctx).edit().putString("lastError", e.toString()).apply()
+        DeliveryTwinState.prefs(ctx).edit().putString("lastError", e.toString()).apply()
       }
     }
   }
@@ -80,18 +80,18 @@ class FieldTwinBridge(private val activity: Activity) {
   @JavascriptInterface
   fun hello(): String {
     helloSeen = true
-    return "field-twin-native-1"
+    return "delivery-twin-native-1"
   }
 
   @JavascriptInterface
-  fun isTracking(): Boolean = FieldTwinState.prefs(activity).getBoolean("trackingOn", true)
+  fun isTracking(): Boolean = DeliveryTwinState.prefs(activity).getBoolean("trackingOn", true)
 
   @JavascriptInterface
   fun setTracking(on: Boolean) {
-    FieldTwinState.prefs(activity).edit().putBoolean("trackingOn", on).apply()
+    DeliveryTwinState.prefs(activity).edit().putBoolean("trackingOn", on).apply()
     activity.runOnUiThread {
       if (on) askAndStart(activity)
-      else activity.stopService(Intent(activity, FieldTwinTrackService::class.java))
+      else activity.stopService(Intent(activity, DeliveryTwinTrackService::class.java))
     }
   }
 
@@ -99,23 +99,23 @@ class FieldTwinBridge(private val activity: Activity) {
   fun hasPermission(): Boolean = hasLocation(activity)
 
   @JavascriptInterface
-  fun lastFix(): String = FieldTwinState.prefs(activity).getString("lastFix", "") ?: ""
+  fun lastFix(): String = DeliveryTwinState.prefs(activity).getString("lastFix", "") ?: ""
 
   @JavascriptInterface
-  fun getStays(): String = FieldTwinState.prefs(activity).getString("stays", "[]") ?: "[]"
+  fun getStays(): String = DeliveryTwinState.prefs(activity).getString("stays", "[]") ?: "[]"
 
   @JavascriptInterface
-  fun openStay(): String = FieldTwinState.prefs(activity).getString("openStay", "") ?: ""
+  fun openStay(): String = DeliveryTwinState.prefs(activity).getString("openStay", "") ?: ""
 
   @JavascriptInterface
   fun ackStays(idsJson: String) {
-    synchronized(FieldTwinState.lock) {
+    synchronized(DeliveryTwinState.lock) {
       val ids = HashSet<String>()
       try {
         val a = JSONArray(idsJson)
         for (i in 0 until a.length()) ids.add(a.getString(i))
       } catch (e: Exception) { return }
-      val p = FieldTwinState.prefs(activity)
+      val p = DeliveryTwinState.prefs(activity)
       val old = try { JSONArray(p.getString("stays", "[]")) } catch (e: Exception) { JSONArray() }
       val keep = JSONArray()
       for (i in 0 until old.length()) {
@@ -128,38 +128,38 @@ class FieldTwinBridge(private val activity: Activity) {
 
   @JavascriptInterface
   fun dayMiles(day: String): Double {
-    val m = FieldTwinState.dayMeters(activity)
+    val m = DeliveryTwinState.dayMeters(activity)
     return Math.round(m.optDouble(day, 0.0) / 1609.344 * 10.0) / 10.0
   }
 
   @JavascriptInterface
   fun takeAction(): String {
-    val p = FieldTwinState.prefs(activity)
+    val p = DeliveryTwinState.prefs(activity)
     val a = p.getString("pendingAction", "") ?: ""
     if (a.isNotEmpty()) p.edit().remove("pendingAction").apply()
     return a
   }
 
   @JavascriptInterface
-  fun odoDue(): Boolean = FieldTwinState.prefs(activity).getLong("odoDueSince", 0L) > 0L && !FieldTwinState.odoSnoozed(activity)
+  fun odoDue(): Boolean = DeliveryTwinState.prefs(activity).getLong("odoDueSince", 0L) > 0L && !DeliveryTwinState.odoSnoozed(activity)
 
   @JavascriptInterface
   fun snoozeOdo(minutes: Int) {
-    FieldTwinState.snoozeOdo(activity, minutes)
+    DeliveryTwinState.snoozeOdo(activity, minutes)
   }
 
   @JavascriptInterface
   fun odoSaved() {
-    FieldTwinState.odoSaved(activity)
+    DeliveryTwinState.odoSaved(activity)
   }
 
   @JavascriptInterface
-  fun getPromptSettings(): String = FieldTwinState.promptSettings(activity).toString()
+  fun getPromptSettings(): String = DeliveryTwinState.promptSettings(activity).toString()
 
   @JavascriptInterface
   fun setPromptSettings(json: String) {
-    FieldTwinState.prefs(activity).edit().putString("promptSettings", json).apply()
-    FieldTwinState.scheduleNextPrompt(activity)
+    DeliveryTwinState.prefs(activity).edit().putString("promptSettings", json).apply()
+    DeliveryTwinState.scheduleNextPrompt(activity)
   }
 
   // Sends a POST from the phone itself instead of the page, so servers that only allow the website's
@@ -193,29 +193,29 @@ class FieldTwinBridge(private val activity: Activity) {
   }
 
   @JavascriptInterface
-  fun trackMode(): String = FieldTwinState.prefs(activity).getString("trackMode", "moving") ?: "moving"
+  fun trackMode(): String = DeliveryTwinState.prefs(activity).getString("trackMode", "moving") ?: "moving"
 
   @JavascriptInterface
   fun setHome(json: String) {
-    FieldTwinState.prefs(activity).edit().putString("home", json).apply()
+    DeliveryTwinState.prefs(activity).edit().putString("home", json).apply()
   }
 
   @JavascriptInterface
   fun promptNow() {
-    FieldTwinState.prefs(activity).edit().putLong("nextPromptAt", System.currentTimeMillis()).apply()
+    DeliveryTwinState.prefs(activity).edit().putLong("nextPromptAt", System.currentTimeMillis()).apply()
   }
 
   @JavascriptInterface
-  fun gpsAt(t: Double): Double = synchronized(FieldTwinState.lock) { FieldTwinState.gpsAt(activity, t.toLong()) }
+  fun gpsAt(t: Double): Double = synchronized(DeliveryTwinState.lock) { DeliveryTwinState.gpsAt(activity, t.toLong()) }
 
   @JavascriptInterface
-  fun gpsNow(): Double = FieldTwinState.gpsTotal(activity)
+  fun gpsNow(): Double = DeliveryTwinState.gpsTotal(activity)
 
   @JavascriptInterface
   fun batteryFree(): Boolean = isBatteryFree(activity)
 
   @JavascriptInterface
-  fun lastError(): String = FieldTwinState.prefs(activity).getString("lastError", "") ?: ""
+  fun lastError(): String = DeliveryTwinState.prefs(activity).getString("lastError", "") ?: ""
 
   // Opens a link in the app that owns it, such as Google Maps for a driving route.
   @JavascriptInterface
@@ -232,16 +232,16 @@ class FieldTwinBridge(private val activity: Activity) {
   }
 
   @JavascriptInterface
-  fun companionStart() { activity.runOnUiThread { FieldTwinCompanion.start(activity) } }
+  fun companionStart() { activity.runOnUiThread { DeliveryTwinCompanion.start(activity) } }
 
   @JavascriptInterface
-  fun companionStop() { FieldTwinCompanion.stop() }
+  fun companionStop() { DeliveryTwinCompanion.stop() }
 
   @JavascriptInterface
-  fun companionSend(cmd: String) { FieldTwinCompanion.send(cmd) }
+  fun companionSend(cmd: String) { DeliveryTwinCompanion.send(cmd) }
 
   @JavascriptInterface
-  fun companionState(): String = FieldTwinCompanion.state
+  fun companionState(): String = DeliveryTwinCompanion.state
 
   @JavascriptInterface
   fun hasCamera(): Boolean = ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -266,7 +266,7 @@ class FieldTwinBridge(private val activity: Activity) {
 
   @JavascriptInterface
   fun setAutoPip(on: Boolean) {
-    FieldTwinState.prefs(activity).edit().putBoolean("autoPip", on).apply()
+    DeliveryTwinState.prefs(activity).edit().putBoolean("autoPip", on).apply()
   }
 
   @JavascriptInterface

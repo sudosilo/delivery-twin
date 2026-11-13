@@ -10,7 +10,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.17/hls.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script>try{var _n=localStorage.getItem('fieldTwinNight'),_h=new Date().getHours();if(_n==='on'||(_n!=='off'&&(_h>=19||_h<6)))document.documentElement.setAttribute('data-theme','night')}catch(e){}</script>
+<script>try{var _n=localStorage.getItem('deliveryTwinNight'),_h=new Date().getHours();if(_n==='on'||(_n!=='off'&&(_h>=19||_h<6)))document.documentElement.setAttribute('data-theme','night')}catch(e){}</script>
 <style>
   :root {
     --bg: #f4f6f9;
@@ -331,7 +331,7 @@
   .marker-emoji-tooltip::before {
     display: none !important;
   }
-  .field-twin-badge {
+  .delivery-twin-badge {
     background: transparent !important;
     border: none !important;
   }
@@ -413,7 +413,7 @@
   }
   #actionBar { justify-content: flex-end; gap: 12px; }
   #actionBar .radar { margin-right: auto; }
-  #updateBtn, #receiptDockBtn {
+  #updateBtn, #receiptDockBtn, #offerDockBtn {
     flex: 0 0 auto;
     min-height: 46px;
     padding: 0 22px;
@@ -423,8 +423,8 @@
     box-shadow: 3px 3px 0 var(--edge);
   }
   #updateBtn { background: var(--accent); color: #ffffff; }
-  #receiptDockBtn { background: var(--panel); color: var(--text); }
-  #updateBtn:active, #receiptDockBtn:active { box-shadow: none; transform: translate(3px, 3px); }
+  #receiptDockBtn, #offerDockBtn { background: var(--panel); color: var(--text); }
+  #updateBtn:active, #receiptDockBtn:active, #offerDockBtn:active { box-shadow: none; transform: translate(3px, 3px); }
   #goDockBtn { flex: 0 0 auto; min-height: 46px; padding: 0 14px; font-size: 16px; font-weight: 700; border: 2px solid var(--edge); border-radius: 8px; box-shadow: 3px 3px 0 var(--edge); background: #2e9e4f; color: #ffffff; }
   #goDockBtn:active { box-shadow: none; transform: translate(3px, 3px); }
   #menuBtn, #infoBtn {
@@ -625,7 +625,7 @@
   #movePinBtn { flex: 0 0 auto; width: 48px; height: 48px; min-width: 0; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
   #milesDockBtn { flex: 0 0 auto; min-height: 46px; padding: 0 14px; font-size: 16px; border: 2px solid var(--edge); border-radius: 8px; box-shadow: 3px 3px 0 var(--edge); background: var(--tint); color: var(--text); }
   #milesDockBtn:active { box-shadow: none; transform: translate(3px, 3px); }
-  #actionBar.three #updateBtn, #actionBar.three #receiptDockBtn { padding: 0 14px; }
+  #actionBar.three #updateBtn, #actionBar.three #receiptDockBtn, #actionBar.three #offerDockBtn { padding: 0 14px; }
   .mi-day { margin-top: 14px; padding-top: 10px; border-top: 2px solid var(--edge); font-weight: 800; }
   .mi-row { padding: 8px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
 
@@ -708,11 +708,11 @@
   body.pip #navBanner div div + div { font-size: 10px !important; }
 
   /* ---- v12 family look: shared with Violet inventory and Glaucous roads ---- */
-  @font-face { font-family: 'Overpass'; font-weight: 400; font-display: swap; unicode-range: U+0000-00B6, U+00B8-FFFF; src: url(field-twin-fonts-v1/field-twin-fonts-v1-overpass-400.woff2) format('woff2'); }
-  @font-face { font-family: 'Overpass'; font-weight: 600; font-display: swap; unicode-range: U+0000-00B6, U+00B8-FFFF; src: url(field-twin-fonts-v1/field-twin-fonts-v1-overpass-600.woff2) format('woff2'); }
-  @font-face { font-family: 'Overpass'; font-weight: 800; font-display: swap; unicode-range: U+0000-00B6, U+00B8-FFFF; src: url(field-twin-fonts-v1/field-twin-fonts-v1-overpass-800.woff2) format('woff2'); }
-  @font-face { font-family: 'Overpass Mono'; font-weight: 400; font-display: swap; unicode-range: U+0000-00B1, U+00B3-FFFF; src: url(field-twin-fonts-v1/field-twin-fonts-v1-overpass-mono-400.woff2) format('woff2'); }
-  @font-face { font-family: 'Overpass Mono'; font-weight: 600; font-display: swap; unicode-range: U+0000-00B1, U+00B3-FFFF; src: url(field-twin-fonts-v1/field-twin-fonts-v1-overpass-mono-600.woff2) format('woff2'); }
+  @font-face { font-family: 'Overpass'; font-weight: 400; font-display: swap; unicode-range: U+0000-00B6, U+00B8-FFFF; src: url(delivery-twin-fonts-v1/delivery-twin-fonts-v1-overpass-400.woff2) format('woff2'); }
+  @font-face { font-family: 'Overpass'; font-weight: 600; font-display: swap; unicode-range: U+0000-00B6, U+00B8-FFFF; src: url(delivery-twin-fonts-v1/delivery-twin-fonts-v1-overpass-600.woff2) format('woff2'); }
+  @font-face { font-family: 'Overpass'; font-weight: 800; font-display: swap; unicode-range: U+0000-00B6, U+00B8-FFFF; src: url(delivery-twin-fonts-v1/delivery-twin-fonts-v1-overpass-800.woff2) format('woff2'); }
+  @font-face { font-family: 'Overpass Mono'; font-weight: 400; font-display: swap; unicode-range: U+0000-00B1, U+00B3-FFFF; src: url(delivery-twin-fonts-v1/delivery-twin-fonts-v1-overpass-mono-400.woff2) format('woff2'); }
+  @font-face { font-family: 'Overpass Mono'; font-weight: 600; font-display: swap; unicode-range: U+0000-00B1, U+00B3-FFFF; src: url(delivery-twin-fonts-v1/delivery-twin-fonts-v1-overpass-mono-600.woff2) format('woff2'); }
   :root {
     --bg: #f2f4f7; --panel: #ffffff; --line: #c9d2dc; --hair: #e3e8ee;
     --accent: #0b4ea2; --accent-dim: #0b4ea2; --accent-deep: #083a7a;
@@ -807,7 +807,7 @@
   :root[data-theme=night] button { background: #2f6fcf; border-color: #2f6fcf; color: #ffffff; }
   :root[data-theme=night] button.secondary { background: var(--panel); color: var(--text); border-color: var(--line); }
   :root[data-theme=night] #menuBtn, :root[data-theme=night] #infoBtn { background: var(--panel); color: var(--text); border-color: var(--edge); }
-  :root[data-theme=night] #receiptDockBtn { background: var(--panel); color: var(--text); }
+  :root[data-theme=night] #receiptDockBtn, :root[data-theme=night] #offerDockBtn { background: var(--panel); color: var(--text); }
   :root[data-theme=night] #milesDockBtn { background: var(--tint); color: var(--text); }
   :root[data-theme=night] #goDockBtn { background: #23884f; border-color: var(--edge); }
   :root[data-theme=night] #updateBtn { background: #2f6fcf; color: #ffffff; border-color: var(--edge); }
@@ -842,7 +842,7 @@
 <header>
   <button id="menuBtn">&#9776;</button>
   <div class="header-center">
-    <div class="title">[ FIELD TWIN ]</div>
+    <div class="title">[ DELIVERY TWIN ]</div>
     <div class="status" id="statusLine">idle</div>
   </div>
   <button id="infoBtn">i</button>
@@ -861,6 +861,7 @@
   </div>
   <button id="milesDockBtn" style="display:none;">Miles</button>
   <button id="goDockBtn">Go</button>
+  <button id="offerDockBtn">Offer</button>
   <button id="updateBtn">Log</button>
   <button id="receiptDockBtn">Receipt</button>
 </div>
@@ -872,6 +873,9 @@
 <div id="sideMenu">
   <h3>Display</h3>
   <button class="secondary" id="nightBtn">Night look, automatic</button>
+  <h3>Delivery</h3>
+  <button class="secondary" id="logOfferBtn">Log offer</button>
+  <button class="secondary" id="offersBtn">Offers</button>
   <h3>Capture</h3>
   <button class="secondary" id="receiptBtn">Receipt</button>
   <button class="secondary tg" id="milesToggleBtn" aria-pressed="false"><span>Odometer</span><i class="tg-sw" aria-hidden="true"></i></button>
@@ -879,12 +883,12 @@
   <button class="secondary tg native-only" id="autoTrackBtn" aria-pressed="false" hidden><span>Auto track</span><i class="tg-sw" aria-hidden="true"></i></button>
   <button class="secondary tg native-only" id="odoPromptBtn" aria-pressed="false" hidden><span>Odometer prompts</span><i class="tg-sw" aria-hidden="true"></i></button>
   <h3 style="display:none">Roads</h3>
-  <button class="secondary tg" id="roadQualityBtn" style="display:none" style="display:none" aria-pressed="false"><span>Quality</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <button class="secondary tg" id="roadHeatBtn" style="display:none" style="display:none" aria-pressed="false"><span>Heat map</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary tg" id="roadQualityBtn" style="display:none" aria-pressed="false"><span>Quality</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary tg" id="roadHeatBtn" style="display:none" aria-pressed="false"><span>Heat map</span><i class="tg-sw" aria-hidden="true"></i></button>
   <h3 style="display:none">Road hazards</h3>
-  <button class="secondary tg" id="hzCrashBtn" style="display:none" style="display:none" aria-pressed="false"><span>Crashes</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <button class="secondary tg" id="hzWorkBtn" style="display:none" style="display:none" aria-pressed="false"><span>Construction</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <button class="secondary tg" id="hzFatalBtn" style="display:none" style="display:none" aria-pressed="false"><span>Crash history</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary tg" id="hzCrashBtn" style="display:none" aria-pressed="false"><span>Crashes</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary tg" id="hzWorkBtn" style="display:none" aria-pressed="false"><span>Construction</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary tg" id="hzFatalBtn" style="display:none" aria-pressed="false"><span>Crash history</span><i class="tg-sw" aria-hidden="true"></i></button>
   <h3>Field chat</h3>
   <button class="secondary tg" id="fieldChatBtn" aria-pressed="false"><span>Field Chat alerts</span><i class="tg-sw" aria-hidden="true"></i></button>
   <button class="secondary" id="fieldChatOpen">Open Field Chat</button>
@@ -914,12 +918,12 @@
   <input type="file" id="importInput" accept="application/json">
   <button class="secondary" id="settingsBtn" aria-expanded="false"><span>Settings</span><i class="chev" aria-hidden="true"></i></button>
   <div id="settingsBox" hidden>
-    <label class="hz-label" for="hzDays" style="display:none" style="display:none">Crashes and construction from the last</label>
-    <select id="hzDays" style="display:none" style="display:none"><option value="1">day</option><option value="7">week</option><option value="30" selected>thirty days</option><option value="90">three months</option><option value="365">year</option><option value="730">two years</option></select>
-    <label class="hz-label" for="hzArea" style="display:none" style="display:none">Show road hazards within a hundred miles, or everywhere</label>
-    <select id="hzArea" style="display:none" style="display:none"><option value="vegas" selected>near Las Vegas</option><option value="me">near me</option><option value="all">everywhere</option></select>
-    <label class="hz-label" for="hzYears" style="display:none" style="display:none">Crash history from the last</label>
-    <select id="hzYears" style="display:none" style="display:none"><option value="1">year on record</option><option value="3">three years on record</option><option value="5" selected>five years on record</option><option value="8">eight years on record</option></select>
+    <label class="hz-label" for="hzDays" style="display:none">Crashes and construction from the last</label>
+    <select id="hzDays" style="display:none"><option value="1">day</option><option value="7">week</option><option value="30" selected>thirty days</option><option value="90">three months</option><option value="365">year</option><option value="730">two years</option></select>
+    <label class="hz-label" for="hzArea" style="display:none">Show road hazards within a hundred miles, or everywhere</label>
+    <select id="hzArea" style="display:none"><option value="vegas" selected>near Las Vegas</option><option value="me">near me</option><option value="all">everywhere</option></select>
+    <label class="hz-label" for="hzYears" style="display:none">Crash history from the last</label>
+    <select id="hzYears" style="display:none"><option value="1">year on record</option><option value="3">three years on record</option><option value="5" selected>five years on record</option><option value="8">eight years on record</option></select>
     <div class="native-only" hidden>
       <label class="hz-label" for="odoFrom">Odometer prompts start at</label>
       <select id="odoFrom"></select>
@@ -1061,7 +1065,7 @@ function setRadar(level) {
 
 const RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
 
-const PHOTO_DB = 'fieldTwinPhotos';
+const PHOTO_DB = 'deliveryTwinPhotos';
 const PHOTO_STORE = 'photos';
 let photoDbPromise = null;
 
@@ -1215,7 +1219,7 @@ function setDeletedIds(set) {
 function photoRemove(id) {
   return new Promise(resolve => {
     try {
-      const req = indexedDB.open('fieldTwinPhotos');
+      const req = indexedDB.open('deliveryTwinPhotos');
       req.onsuccess = () => {
         try {
           const db = req.result;
@@ -1238,11 +1242,11 @@ async function cloudDeletePending() {
   if (!gone.size) return;
   for (const id of Array.from(gone)) {
     try {
-      await sb.storage.from('photos').remove([cloudUser.id + '/' + id + '.jpg']);
-      await sb.from('receipts').delete().eq('entry_id', id);
-      const del = await sb.from('entries').delete().eq('id', id);
+      await sb.storage.from('delivery-twin-photos').remove([cloudUser.id + '/' + id + '.jpg']);
+      await sb.from('delivery_twin_receipts').delete().eq('entry_id', id);
+      const del = await sb.from('delivery_twin_entries').delete().eq('id', id);
       if (del.error) continue;
-      const check = await sb.from('entries').select('id').eq('id', id);
+      const check = await sb.from('delivery_twin_entries').select('id').eq('id', id);
       if (!check.error && (check.data || []).length === 0) {
         gone.delete(id);
         setDeletedIds(gone);
@@ -1282,7 +1286,7 @@ async function cloudPush() {
       let photoPath = e.photoPath || null;
       if (e.photo && !photoPath) {
         const path = cloudUser.id + '/' + e.id + '.jpg';
-        const up = await sb.storage.from('photos').upload(path, dataUrlToBlob(e.photo), {
+        const up = await sb.storage.from('delivery-twin-photos').upload(path, dataUrlToBlob(e.photo), {
           upsert: true, contentType: 'image/jpeg'
         });
         if (!up.error) {
@@ -1290,10 +1294,10 @@ async function cloudPush() {
           e.photoPath = path;
         }
       }
-      const er = await sb.from('entries').upsert(entryToRow(e, photoPath), { onConflict: 'id' });
+      const er = await sb.from('delivery_twin_entries').upsert(entryToRow(e, photoPath), { onConflict: 'id' });
       if (er.error) throw new Error(er.error.message);
       if (e.category === 'receipt' && e.receipt) {
-        const rr = await sb.from('receipts').upsert({
+        const rr = await sb.from('delivery_twin_receipts').upsert({
           entry_id: e.id,
           user_id: cloudUser.id,
           store: e.receipt.store || '',
@@ -1342,8 +1346,8 @@ async function cloudPull() {
       }
       return out;
     }
-    const res = { data: await allRows('entries', 'ts') };
-    const recRows = await allRows('receipts', null);
+    const res = { data: await allRows('delivery_twin_entries', 'ts') };
+    const recRows = await allRows('delivery_twin_receipts', null);
     const receiptMap = {};
     recRows.forEach(r => { receiptMap[r.entry_id] = r; });
     cloudCount = res.data.length;
@@ -1420,7 +1424,7 @@ async function cloudPull() {
 
 async function cloudPhotoUrl(path) {
   if (!cloudReady() || !path) return '';
-  const res = await sb.storage.from('photos').createSignedUrl(path, 3600);
+  const res = await sb.storage.from('delivery-twin-photos').createSignedUrl(path, 3600);
   return res.data ? res.data.signedUrl : '';
 }
 
@@ -1651,7 +1655,7 @@ function initMap() {
         const size = n < 10 ? 34 : (n < 50 ? 40 : 46);
         return L.divIcon({
           html: '<div class="ft-cluster" style="width:' + size + 'px;height:' + size + 'px;font-size:' + (n < 100 ? 15 : 13) + 'px;">' + n + '</div>',
-          className: 'field-twin-badge',
+          className: 'delivery-twin-badge',
           iconSize: [size, size],
           iconAnchor: [size / 2, size / 2]
         });
@@ -1933,7 +1937,7 @@ function exportSearchCsv() {
       (e.receipt && e.receipt.items) ? e.receipt.items.map(it => it.name + (it.price !== null && it.price !== undefined ? ' ' + Number(it.price).toFixed(2) : '')).join('; ') : ''
     ].map(csvCell).join(','));
   });
-  saveTextFile('field-twin-search-' + localDay(new Date()) + '.csv', 'text/csv', lines.join('\n'));
+  saveTextFile('delivery-twin-search-' + localDay(new Date()) + '.csv', 'text/csv', lines.join('\n'));
 }
 
 function buildSearchPage() {
@@ -2017,14 +2021,14 @@ function renderMarkers() {
         const amt = e.receipt && e.receipt.total ? '$' + Math.round(e.receipt.total) : '$';
         pinIcon = L.divIcon({
           html: '<div class="ft-price">' + amt + '</div>',
-          className: 'field-twin-badge',
+          className: 'delivery-twin-badge',
           iconSize: [0, 0],
           iconAnchor: [0, 0]
         });
       } else {
         pinIcon = L.divIcon({
           html: '<div class="ft-signwrap">' + signHtml(key, iconChar, 34) + '</div>',
-          className: 'field-twin-badge',
+          className: 'delivery-twin-badge',
           iconSize: [0, 0],
           iconAnchor: [0, 0]
         });
@@ -2598,7 +2602,7 @@ function initHere() {
     }
   });
   map.addControl(new Locate());
-  if (window.FieldTwinNative && typeof window.FieldTwinNative.enterPip === 'function') {
+  if (window.DeliveryTwinNative && typeof window.DeliveryTwinNative.enterPip === 'function') {
     const Pip = L.Control.extend({
       options: { position: 'topleft' },
       onAdd: function () {
@@ -2999,7 +3003,7 @@ function renderCameras() {
         const size = n < 10 ? 32 : (n < 50 ? 38 : 44);
         return L.divIcon({
           html: '<div class="ft-cluster cam-cluster" style="width:' + size + 'px;height:' + size + 'px;font-size:' + (n < 100 ? 14 : 12) + 'px;">' + n + '</div>',
-          className: 'field-twin-badge',
+          className: 'delivery-twin-badge',
           iconSize: [size, size],
           iconAnchor: [size / 2, size / 2]
         });
@@ -3014,7 +3018,7 @@ function renderCameras() {
       icon: L.divIcon({
         html: '<div style="width:30px;height:30px;border-radius:50%;background:' + (c.online === false ? '#9aa7b1' : '#00838f') + ';opacity:' + (c.online === false ? '0.55' : '1') + ';border:3px solid #ffffff;box-shadow:0 2px 6px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:15px;">\u{1F4F9}</div>' +
               '<div class="cam-label" style="position:absolute;top:32px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;background:rgba(255,255,255,0.9);padding:1px 4px;border-radius:3px;color:#14202e;">' + escapeHtml(c.roadway || '') + '</div>',
-        className: 'field-twin-badge',
+        className: 'delivery-twin-badge',
         iconSize: [30, 30],
         iconAnchor: [15, 15]
       }),
@@ -3207,12 +3211,12 @@ function nativeSend(method, url, headers, body) {
     const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
     ftHttpWaiting[id] = resolve;
     setTimeout(() => { if (ftHttpWaiting[id]) { delete ftHttpWaiting[id]; resolve({ status: 0, text: 'timed out' }); } }, 150000);
-    try { window.FieldTwinNative.httpSend(id, method, url, JSON.stringify(headers || {}), body || ''); }
+    try { window.DeliveryTwinNative.httpSend(id, method, url, JSON.stringify(headers || {}), body || ''); }
     catch (e) { delete ftHttpWaiting[id]; resolve({ status: 0, text: e.message }); }
   });
 }
 (function () {
-  const N = window.FieldTwinNative;
+  const N = window.DeliveryTwinNative;
   if (!N || typeof N.httpSend !== 'function') return;
   const pageFetch = window.fetch.bind(window);
   window.fetch = async function (input, opts) {
@@ -3763,13 +3767,13 @@ function applyMilesToggle() {
 // most recent stretches, and every new reading becomes the new starting point so errors never pile up.
 const M_PER_MI = 1609.344;
 function gpsAt(t) {
-  try { const v = window.FieldTwinNative ? Number(window.FieldTwinNative.gpsAt(t)) : -1; return isFinite(v) ? v : -1; } catch (e) { return -1; }
+  try { const v = window.DeliveryTwinNative ? Number(window.DeliveryTwinNative.gpsAt(t)) : -1; return isFinite(v) ? v : -1; } catch (e) { return -1; }
 }
 function gpsNowMeters() {
-  try { const v = window.FieldTwinNative ? Number(window.FieldTwinNative.gpsNow()) : -1; return isFinite(v) ? v : -1; } catch (e) { return -1; }
+  try { const v = window.DeliveryTwinNative ? Number(window.DeliveryTwinNative.gpsNow()) : -1; return isFinite(v) ? v : -1; } catch (e) { return -1; }
 }
 function calSegments() {
-  if (!window.FieldTwinNative) return [];
+  if (!window.DeliveryTwinNative) return [];
   const list = odoList();
   const segs = [];
   for (let i = 1; i < list.length; i++) {
@@ -3794,7 +3798,7 @@ function calFactor() {
 }
 // The odometer GPS expects at time t, built forward from the last reading at or before t.
 function calEstimate(t) {
-  if (!window.FieldTwinNative) return null;
+  if (!window.DeliveryTwinNative) return null;
   const list = odoList().filter(e => new Date(e.timestamp).getTime() <= t);
   const last = list[list.length - 1];
   if (!last) return null;
@@ -3806,7 +3810,7 @@ function calEstimate(t) {
   return { reading: last.odometer.reading + gpsMi * cal.factor, gpsMi: gpsMi, from: last, factor: cal.factor, count: cal.count };
 }
 function calText() {
-  if (!window.FieldTwinNative) return '';
+  if (!window.DeliveryTwinNative) return '';
   const c = calFactor();
   if (!c.count) return 'GPS correction: waiting for two odometer readings with GPS tracking between them.';
   return 'GPS correction: ' + c.factor.toFixed(3) + ', from ' + c.count + (c.count === 1 ? ' stretch' : ' stretches') + ' covering ' + Math.round(c.odoMi) + ' odometer miles.';
@@ -3858,7 +3862,7 @@ function showOdometer(locked) {
     document.getElementById('odoSnoozeX').addEventListener('click', () => {
       const until = Date.now() + ODO_SNOOZE_MS;
       try { localStorage.setItem('odoSnoozeUntil', String(until)); } catch (e) {}
-      try { if (window.FieldTwinNative && window.FieldTwinNative.snoozeOdo) window.FieldTwinNative.snoozeOdo(ODO_SNOOZE_MS / 60000); } catch (e) {}
+      try { if (window.DeliveryTwinNative && window.DeliveryTwinNative.snoozeOdo) window.DeliveryTwinNative.snoozeOdo(ODO_SNOOZE_MS / 60000); } catch (e) {}
       odoLocked = false;
       closePanel();
       setStatus('odometer reading put off for half an hour');
@@ -3940,10 +3944,10 @@ function showOdometer(locked) {
     renderMarkers();
     odoLocked = false;
     try { localStorage.removeItem('odoSnoozeUntil'); } catch (e) {}
-    try { if (window.FieldTwinNative) window.FieldTwinNative.odoSaved(); } catch (e) {}
+    try { if (window.DeliveryTwinNative) window.DeliveryTwinNative.odoSaved(); } catch (e) {}
     closePanel();
     let calNote = '';
-    if (window.FieldTwinNative && last) {
+    if (window.DeliveryTwinNative && last) {
       const seg = calSegments().find(g => g.to.id === entry.id);
       if (seg) {
         const c = calFactor();
@@ -4034,7 +4038,7 @@ function showMileage() {
       rows.push([d.toLocaleDateString(), d.toLocaleTimeString(), g.entry.odometer.vehicle || '', g.entry.odometer.reading, g.miles === null ? '' : g.miles, g.crow === null ? '' : g.crow,
         g.entry.odometer.work ? 'work' : 'personal', g.entry.addressLabel || '', hasPos(g.entry) ? g.entry.lat : '', hasPos(g.entry) ? g.entry.lon : '', (g.entry.answers || [])[3] || '']);
     });
-    saveTextFile('field-twin-mileage-' + localStamp(new Date()).replace(/[:T]/g, '-') + '.csv', 'text/csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
+    saveTextFile('delivery-twin-mileage-' + localStamp(new Date()).replace(/[:T]/g, '-') + '.csv', 'text/csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
   });
 }
 
@@ -4046,8 +4050,8 @@ const VIOLET_ORIGIN = 'https://field-twin-violet.vercel.app';
 
 // One sign in for all three Delivery Twin apps. Violet uses this same account system, Glaucous has its own
 // with the same email and password. Each app gets its own fresh login, held here until that app opens.
-const TWIN_HAND_KEY = 'fieldTwinHandoff';
-const TWIN_PICK_KEY = 'fieldTwinSignInto';
+const TWIN_HAND_KEY = 'deliveryTwinHandoff';
+const TWIN_PICK_KEY = 'deliveryTwinSignInto';
 function twinHand() { try { return JSON.parse(localStorage.getItem(TWIN_HAND_KEY) || '{}') || {}; } catch (e) { return {}; } }
 function twinHandSave(h) { try { localStorage.setItem(TWIN_HAND_KEY, JSON.stringify(h)); } catch (e) {} }
 function twinPick() {
@@ -4072,7 +4076,7 @@ function twinReadBoxes(withTeal) {
 }
 async function twinLogin(url, key, email, pass) {
   try {
-    const c = window.supabase.createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'fieldtwin-hand-' + Date.now().toString(36) } });
+    const c = window.supabase.createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'deliverytwin-hand-' + Date.now().toString(36) } });
     const r = await c.auth.signInWithPassword({ email: email, password: pass });
     if (r.error || !r.data || !r.data.session) return null;
     return { at: r.data.session.access_token, rt: r.data.session.refresh_token, email: r.data.user.email };
@@ -4109,14 +4113,14 @@ function twinSendViolet() {
   if (!w) return;
   const h = twinHand();
   if (h.violet) w.postMessage({ type: 'fieldtwin-session', at: h.violet.at, rt: h.violet.rt, email: h.violet.email }, VIOLET_ORIGIN);
-  else if (h.violetOut) w.postMessage({ type: 'fieldtwin-signout' }, VIOLET_ORIGIN);
+  else if (h.violetOut) w.postMessage({ type: 'deliverytwin-signout' }, VIOLET_ORIGIN);
 }
 window.addEventListener('message', e => {
   if (e.origin !== VIOLET_ORIGIN || !e.data || typeof e.data !== 'object') return;
   const h = twinHand();
-  if (e.data.type === 'fieldtwin-ready') twinSendViolet();
+  if (e.data.type === 'deliverytwin-ready') twinSendViolet();
   else if (e.data.type === 'fieldtwin-session-ok') { delete h.violet; twinHandSave(h); }
-  else if (e.data.type === 'fieldtwin-signout-ok') { delete h.violetOut; twinHandSave(h); }
+  else if (e.data.type === 'deliverytwin-signout-ok') { delete h.violetOut; twinHandSave(h); }
   else if (e.data.type === 'fieldtwin-session-fail') setStatus('Inventory sign in failed, ' + String(e.data.message || 'no reason given').slice(0, 80));
 });
 // Opens Glaucous and hands it the waiting login, or the sign out, in the part of the address that never leaves the phone.
@@ -4157,7 +4161,7 @@ async function loadCqRuns() {
   if (cqLoading) return cqLoading;
   cqLoading = (async () => {
     if (!window.supabase) throw new Error('road service library did not load');
-    if (!cqClient) cqClient = window.supabase.createClient(CQ_URL, CQ_ANON, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'fieldtwin-cq-readonly' } });
+    if (!cqClient) cqClient = window.supabase.createClient(CQ_URL, CQ_ANON, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'deliverytwin-cq-readonly' } });
     const res = await cqClient.from('chassisquiver_runs').select('id,road,at,score,rating,miles,mph,vehicle,path').order('at', { ascending: false }).limit(1500);
     if (res.error) throw new Error(res.error.message);
     cqRuns = (res.data || []).filter(r => Array.isArray(r.path) && r.path.length > 1);
@@ -4557,6 +4561,195 @@ function showSpend() {
   }));
 }
 
+// Delivery Twin offer logger. Every offer is kept on the phone and copied to the cloud when signed in.
+const DT_OFFERS_KEY = 'dtOffers';
+const DT_APPS_KEY = 'dtGigApps';
+
+function dtOffersLoad() {
+  try { return JSON.parse(localStorage.getItem(DT_OFFERS_KEY) || '[]'); } catch (e) { return []; }
+}
+function dtOffersSave(list) {
+  try { localStorage.setItem(DT_OFFERS_KEY, JSON.stringify(list)); } catch (e) {}
+}
+function dtAppsLoad() {
+  try { return JSON.parse(localStorage.getItem(DT_APPS_KEY) || '[]'); } catch (e) { return []; }
+}
+function dtAppsSave(list) {
+  try { localStorage.setItem(DT_APPS_KEY, JSON.stringify(list)); } catch (e) {}
+}
+function dtNum(v) {
+  const n = parseFloat(String(v || '').replace(/[^0-9.]/g, ''));
+  return isFinite(n) ? n : null;
+}
+function dtOfferRow(o) {
+  return {
+    id: o.id, gig_app: o.app || null, offered_at: new Date(o.ts).toISOString(),
+    lat: o.lat, lng: o.lng, pay: o.pay, miles: o.miles, minutes: o.minutes,
+    pickup: o.pickup || null, dropoff: o.dropoff || null, accepted: o.accepted,
+    wait_minutes: o.wait, note: o.note || null, updated_at: new Date().toISOString()
+  };
+}
+async function dtOfferPush(o) {
+  if (!(sb && cloudUser)) return;
+  try { await sb.from('delivery_twin_offers').upsert(dtOfferRow(o), { onConflict: 'id' }); } catch (e) {}
+}
+async function dtOffersPull() {
+  if (!(sb && cloudUser)) return;
+  try {
+    const res = await sb.from('delivery_twin_offers').select('*').order('offered_at', { ascending: false }).limit(2000);
+    if (!res.data) return;
+    const list = dtOffersLoad();
+    const have = {};
+    list.forEach(o => { have[o.id] = true; });
+    res.data.forEach(r => {
+      if (have[r.id]) return;
+      list.push({
+        id: r.id, app: r.gig_app || '', ts: new Date(r.offered_at).getTime(), lat: r.lat, lng: r.lng,
+        pay: r.pay === null ? null : Number(r.pay), miles: r.miles === null ? null : Number(r.miles),
+        minutes: r.minutes === null ? null : Number(r.minutes), pickup: r.pickup || '', dropoff: r.dropoff || '',
+        accepted: r.accepted, wait: r.wait_minutes === null ? null : Number(r.wait_minutes), note: r.note || ''
+      });
+    });
+    list.sort((a, b) => b.ts - a.ts);
+    dtOffersSave(list);
+  } catch (e) {}
+}
+
+function dtCloseMenu() {
+  const m = document.getElementById('sideMenu'), ov = document.getElementById('menuOverlay');
+  if (m) m.classList.remove('open');
+  if (ov) ov.classList.remove('open');
+}
+
+function showOfferForm() {
+  const panel = document.getElementById('panel');
+  const apps = dtAppsLoad();
+  const last = dtOffersLoad()[0];
+  const pick = last && last.app ? last.app : (apps[0] || '');
+  let html = '<h2>Log offer</h2>';
+  html += '<div class="meta-line">Time and location are saved on their own.</div>';
+  html += '<label class="hz-label" for="dtApp">Gig app</label><select id="dtApp">';
+  apps.forEach(a => { html += '<option' + (a === pick ? ' selected' : '') + '>' + escapeHtml(a) + '</option>'; });
+  html += '<option value="__new">Add a new app</option></select>';
+  html += '<input type="text" id="dtAppNew" placeholder="App name" style="display:' + (apps.length ? 'none' : 'block') + ';margin-top:8px;">';
+  html += '<label class="hz-label" for="dtPay">Pay in dollars</label><input type="number" inputmode="decimal" id="dtPay">';
+  html += '<label class="hz-label" for="dtMiles">Miles</label><input type="number" inputmode="decimal" id="dtMiles">';
+  html += '<label class="hz-label" for="dtMinutes">Minutes the app says it takes</label><input type="number" inputmode="decimal" id="dtMinutes">';
+  html += '<label class="hz-label" for="dtPickup">Pickup</label><input type="text" id="dtPickup">';
+  html += '<label class="hz-label" for="dtDropoff">Dropoff area</label><input type="text" id="dtDropoff">';
+  html += '<label class="hz-label" for="dtWait">Wait at pickup in minutes, if you know it</label><input type="number" inputmode="decimal" id="dtWait">';
+  html += '<div id="dtRate" class="meta-line" style="margin-top:8px;"></div>';
+  html += '<div class="panel-actions"><button id="dtAccept">Accepted</button><button class="secondary" id="dtDecline">Declined</button><button class="secondary" id="dtCancel">Close</button></div>';
+  panel.innerHTML = html;
+  panel.scrollTop = 0;
+  panel.classList.add('open');
+  const sel = document.getElementById('dtApp'), nw = document.getElementById('dtAppNew');
+  if (!apps.length) sel.value = '__new';
+  sel.addEventListener('change', () => { nw.style.display = sel.value === '__new' ? 'block' : 'none'; if (sel.value === '__new') nw.focus(); });
+  const rate = () => {
+    const p = dtNum(document.getElementById('dtPay').value), m = dtNum(document.getElementById('dtMiles').value), t = dtNum(document.getElementById('dtMinutes').value);
+    const bits = [];
+    if (p !== null && m) bits.push('$' + (p / m).toFixed(2) + ' a mile');
+    if (p !== null && t) bits.push('$' + (p / t * 60).toFixed(2) + ' an hour');
+    document.getElementById('dtRate').textContent = bits.join(', ');
+  };
+  ['dtPay', 'dtMiles', 'dtMinutes'].forEach(id => document.getElementById(id).addEventListener('input', rate));
+  const save = async accepted => {
+    let app = sel.value === '__new' ? nw.value.trim() : sel.value;
+    if (app && apps.indexOf(app) === -1) { apps.push(app); dtAppsSave(apps); }
+    const o = {
+      id: 'o' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      app: app || '', ts: Date.now(), lat: null, lng: null,
+      pay: dtNum(document.getElementById('dtPay').value), miles: dtNum(document.getElementById('dtMiles').value),
+      minutes: dtNum(document.getElementById('dtMinutes').value),
+      pickup: document.getElementById('dtPickup').value.trim(), dropoff: document.getElementById('dtDropoff').value.trim(),
+      accepted: accepted, wait: dtNum(document.getElementById('dtWait').value), note: ''
+    };
+    const list = dtOffersLoad();
+    list.unshift(o);
+    dtOffersSave(list);
+    closePanel();
+    setStatus((accepted ? 'Accepted' : 'Declined') + ' offer saved');
+    try {
+      const pos = await getPosition();
+      o.lat = pos.coords.latitude; o.lng = pos.coords.longitude;
+      const l2 = dtOffersLoad(), i = l2.findIndex(x => x.id === o.id);
+      if (i !== -1) { l2[i] = o; dtOffersSave(l2); }
+    } catch (e) {}
+    dtOfferPush(o);
+  };
+  document.getElementById('dtAccept').addEventListener('click', () => save(true));
+  document.getElementById('dtDecline').addEventListener('click', () => save(false));
+  document.getElementById('dtCancel').addEventListener('click', closePanel);
+}
+
+function dtStats(list) {
+  let pay = 0, miles = 0, mins = 0, acc = 0;
+  list.forEach(o => {
+    if (o.accepted) acc++;
+    if (o.pay !== null && o.miles) { pay += o.pay; miles += o.miles; }
+  });
+  let pay2 = 0;
+  list.forEach(o => { if (o.pay !== null && o.minutes) { pay2 += o.pay; mins += o.minutes; } });
+  return {
+    count: list.length, accepted: acc,
+    perMile: miles ? pay / miles : null, perHour: mins ? pay2 / mins * 60 : null
+  };
+}
+function dtStatsLine(s) {
+  const bits = [s.count + (s.count === 1 ? ' offer' : ' offers'), s.accepted + ' accepted'];
+  if (s.perMile !== null) bits.push('$' + s.perMile.toFixed(2) + ' a mile');
+  if (s.perHour !== null) bits.push('$' + s.perHour.toFixed(2) + ' an hour');
+  return bits.join(', ');
+}
+
+async function showOffers() {
+  const panel = document.getElementById('panel');
+  await dtOffersPull();
+  const list = dtOffersLoad();
+  let html = '<h2>Offers</h2>';
+  html += '<div class="meta-line">' + dtStatsLine(dtStats(list)) + '</div>';
+  const today = localDay(new Date());
+  const todays = list.filter(o => localDay(new Date(o.ts)) === today);
+  html += '<div class="question">Today</div><div class="meta-line">' + (todays.length ? dtStatsLine(dtStats(todays)) : 'no offers yet today') + '</div>';
+  const byApp = {};
+  list.forEach(o => { const k = o.app || 'no app named'; (byApp[k] = byApp[k] || []).push(o); });
+  const keys = Object.keys(byApp);
+  if (keys.length > 1) {
+    html += '<div class="question">By app</div>';
+    keys.sort((a, b) => byApp[b].length - byApp[a].length).forEach(k => {
+      html += '<div class="meta-line">' + escapeHtml(k) + ', ' + dtStatsLine(dtStats(byApp[k])) + '</div>';
+    });
+  }
+  html += '<div class="question">Latest</div>';
+  list.slice(0, 30).forEach(o => {
+    const t = new Date(o.ts).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+    const bits = [t, escapeHtml(o.app || 'no app named'), o.accepted ? 'accepted' : 'declined'];
+    if (o.pay !== null) bits.push('$' + o.pay.toFixed(2));
+    if (o.miles) bits.push(o.miles + ' mi');
+    if (o.pickup) bits.push(escapeHtml(o.pickup));
+    html += '<div class="meta-line" style="padding:6px 0;border-bottom:1px solid var(--line);">' + bits.join(', ') +
+      ' <span data-dtdel="' + o.id + '" style="color:var(--accent);cursor:pointer;margin-left:6px;">delete</span></div>';
+  });
+  if (!list.length) html += '<div class="meta-line">no offers logged yet</div>';
+  html += '<div class="panel-actions"><button id="dtLogMore">Log offer</button><button class="secondary" id="dtCloseOffers">Close</button></div>';
+  panel.innerHTML = html;
+  panel.scrollTop = 0;
+  panel.classList.add('open');
+  document.getElementById('dtCloseOffers').addEventListener('click', closePanel);
+  document.getElementById('dtLogMore').addEventListener('click', showOfferForm);
+  panel.querySelectorAll('[data-dtdel]').forEach(el => el.addEventListener('click', async () => {
+    const id = el.getAttribute('data-dtdel');
+    dtOffersSave(dtOffersLoad().filter(x => x.id !== id));
+    if (sb && cloudUser) { try { await sb.from('delivery_twin_offers').delete().eq('id', id); } catch (e) {} }
+    showOffers();
+  }));
+}
+
+document.getElementById('offerDockBtn').addEventListener('click', showOfferForm);
+document.getElementById('logOfferBtn').addEventListener('click', () => { dtCloseMenu(); showOfferForm(); });
+document.getElementById('offersBtn').addEventListener('click', () => { dtCloseMenu(); showOffers(); });
+
 function dayLogN(n, word) {
   return n + ' ' + word + (n === 1 ? '' : 's');
 }
@@ -4644,7 +4837,7 @@ function buildDayLog(dk) {
   r.summary = [
     (list.length === 1 ? '1 entry' : list.length + ' entries') + ' from ' + dayLogTime(first.timestamp) + ' to ' + dayLogTime(last.timestamp) + ', ' + dayLogGap(spanMin) + ' on the clock',
     dayLogN(Object.keys(sites).length, 'distinct place') + ', ' + (Math.round(ground * 10) / 10) + ' miles between entries in a straight line',
-    (window.FieldTwinNative ? (() => { try { const raw = Number(window.FieldTwinNative.dayMiles(dk)) || 0; const c = calFactor(); return 'Miles driven by phone GPS: ' + raw + (c.count ? ', corrected ' + (Math.round(raw * c.factor * 10) / 10) : '') + '. '; } catch (e) { return 'Miles driven by phone GPS: unknown. '; } })() : '') + 'Miles driven by odometer: ' + (odos.length ? (Math.round((workMi + persMi) * 10) / 10) + ' (work ' + (Math.round(workMi * 10) / 10) + ', personal ' + (Math.round(persMi * 10) / 10) + ')' : 'unknown'),
+    (window.DeliveryTwinNative ? (() => { try { const raw = Number(window.DeliveryTwinNative.dayMiles(dk)) || 0; const c = calFactor(); return 'Miles driven by phone GPS: ' + raw + (c.count ? ', corrected ' + (Math.round(raw * c.factor * 10) / 10) : '') + '. '; } catch (e) { return 'Miles driven by phone GPS: unknown. '; } })() : '') + 'Miles driven by odometer: ' + (odos.length ? (Math.round((workMi + persMi) * 10) / 10) + ' (work ' + (Math.round(workMi * 10) / 10) + ', personal ' + (Math.round(persMi * 10) / 10) + ')' : 'unknown'),
     'Spent: $' + spent.toFixed(2) + ' on ' + dayLogN(rs.length, 'receipt') + ' (work $' + work.toFixed(2) + ', personal $' + personal.toFixed(2) + ', tax $' + tax.toFixed(2) + ', saved $' + saved.toFixed(2) + ')',
     'Questions answered: ' + answered + ' of ' + asked + ', photos: ' + photos
   ];
@@ -4680,7 +4873,7 @@ function buildDayLog(dk) {
 }
 
 function dayLogText(r) {
-  const out = ['FIELD TWIN DAY LOG', r.label, ''];
+  const out = ['DELIVERY TWIN DAY LOG', r.label, ''];
   if (!r.list.length) { out.push('No entries on this day.'); return out.join('\n'); }
   out.push('SUMMARY');
   r.summary.forEach(s => out.push(s));
@@ -4749,7 +4942,7 @@ async function requestDebrief(dk) {
   const r = buildDayLog(dk);
   let log = dayLogText(r);
   try {
-    if (window.FieldTwinNative && window.FieldTwinNative.dayMiles) log += '\n\nGPS counted about ' + window.FieldTwinNative.dayMiles(dk) + ' miles on this day.';
+    if (window.DeliveryTwinNative && window.DeliveryTwinNative.dayMiles) log += '\n\nGPS counted about ' + window.DeliveryTwinNative.dayMiles(dk) + ' miles on this day.';
   } catch (e) {}
   const payload = JSON.stringify({ day: dk, label: r.label, log: log, history: debriefHistory(dk) });
   const headers = { 'Content-Type': 'application/json' };
@@ -5365,9 +5558,9 @@ function closePanel() {
 
 // Saves a text file. The phone app writes it straight into Downloads, a browser gets a normal download.
 function saveTextFile(name, mime, text) {
-  if (window.FieldTwinNative && typeof window.FieldTwinNative.saveFile === 'function') {
+  if (window.DeliveryTwinNative && typeof window.DeliveryTwinNative.saveFile === 'function') {
     let res = '';
-    try { res = String(window.FieldTwinNative.saveFile(name, mime, text)); } catch (e) { res = 'error: ' + e.message; }
+    try { res = String(window.DeliveryTwinNative.saveFile(name, mime, text)); } catch (e) { res = 'error: ' + e.message; }
     if (res.indexOf('ok') === 0) { setStatus(name + ' saved to Downloads'); return; }
     setStatus('could not save the file, ' + res.replace(/^error:\s*/, ''));
     return;
@@ -5386,14 +5579,14 @@ function saveTextFile(name, mime, text) {
 
 function exportEntries() {
   const payload = {
-    format: 'field-twin',
+    format: 'delivery-twin',
     version: 1,
     twinId: TWIN_ID,
     exportedAt: new Date().toISOString(),
     stats: scoreEntries(entries),
     entries: entries
   };
-  saveTextFile('field-twin-' + TWIN_ID + '-' + localDay(new Date()) + '.json', 'application/json', JSON.stringify(payload, null, 2));
+  saveTextFile('delivery-twin-' + TWIN_ID + '-' + localDay(new Date()) + '.json', 'application/json', JSON.stringify(payload, null, 2));
 }
 
 function importEntries(file) {
@@ -5576,14 +5769,14 @@ window.addEventListener('unhandledrejection', (e) => {
   setStatus('PROMISE ERROR: ' + msg);
 });
 
-window.fieldTwinReady = init();
+window.deliveryTwinReady = init();
 </script>
 <script>
-// Phone app extras: when Delivery Twin runs inside its Android app, window.FieldTwinNative is the phone side.
+// Phone app extras: when Delivery Twin runs inside its Android app, window.DeliveryTwinNative is the phone side.
 // It tracks location in the background, turns twenty minute parks into stops, adds up GPS miles,
 // and raises odometer prompts that lock this screen until a reading is saved.
 (function () {
-  const N = window.FieldTwinNative;
+  const N = window.DeliveryTwinNative;
   if (!N) return;
   try { N.hello(); } catch (e) { return; }
   document.querySelectorAll('.native-only').forEach(el => { el.hidden = false; });
@@ -5767,7 +5960,7 @@ window.fieldTwinReady = init();
     checkOdometer();
     importStops();
   }
-  Promise.resolve(window.fieldTwinReady).catch(() => {}).then(() => {
+  Promise.resolve(window.deliveryTwinReady).catch(() => {}).then(() => {
     document.addEventListener('visibilitychange', wake);
     setInterval(wake, 60000);
     setTimeout(wake, 800);
@@ -5822,7 +6015,7 @@ window.fieldTwinReady = init();
 <script>
 // Twin tabs: Field map is this app, Inventory is Delivery Twin Violet loaded in place so switching never leaves the page.
 (function () {
-  const TAB_KEY = 'fieldTwinTab';
+  const TAB_KEY = 'deliveryTwinTab';
   const teal = document.getElementById('tabTeal');
   const violet = document.getElementById('tabViolet');
   const view = document.getElementById('violetView');
@@ -5855,12 +6048,12 @@ window.fieldTwinReady = init();
 // Your phones on the map, and home. Each phone signed in to the account writes its own spot into the account's
 // profile under its own key, so phones never overwrite each other, and reads everyone else's back.
 const DEV_COLORS = { orange: '#f07a1a', blue: '#1265c9', green: '#2e9e4f', red: '#d93636', teal: '#14a3a3', violet: '#8a4fd6', yellow: '#e8c21a', pink: '#e2589c', '': '#8a94a6' };
-const HOME_KEY = 'fieldTwinHome', COLOR_KEY = 'fieldTwinDevColor';
+const HOME_KEY = 'deliveryTwinHome', COLOR_KEY = 'deliveryTwinDevColor';
 let devLayer = null, lastDevPost = 0, lastDevSpot = null;
 function homeGet() { try { return JSON.parse(localStorage.getItem(HOME_KEY) || 'null'); } catch (e) { return null; } }
 function homeApply(h) {
   try { if (h) localStorage.setItem(HOME_KEY, JSON.stringify(h)); else localStorage.removeItem(HOME_KEY); } catch (e) {}
-  try { if (window.FieldTwinNative) window.FieldTwinNative.setHome(h ? JSON.stringify(h) : ''); } catch (e) {}
+  try { if (window.DeliveryTwinNative) window.DeliveryTwinNative.setHome(h ? JSON.stringify(h) : ''); } catch (e) {}
   const t = document.getElementById('homeText');
   if (t) t.textContent = h ? 'Home is set, a ' + h.r + ' meter circle.' : 'No home set.';
 }
@@ -5876,8 +6069,8 @@ function atHomePoint(lat, lon) {
 function devColor() { try { return localStorage.getItem(COLOR_KEY) || ''; } catch (e) { return ''; } }
 function mySpot() {
   try {
-    if (window.FieldTwinNative) {
-      const f = JSON.parse(window.FieldTwinNative.lastFix() || 'null');
+    if (window.DeliveryTwinNative) {
+      const f = JSON.parse(window.DeliveryTwinNative.lastFix() || 'null');
       if (f && f.lat) return { lat: f.lat, lon: f.lon, acc: f.acc, t: f.t };
     }
   } catch (e) {}
@@ -5899,7 +6092,7 @@ async function devTick(force) {
   const meta = {};
   const moved = me && (!lastDevSpot || metersBetween(lastDevSpot.lat, lastDevSpot.lon, me.lat, me.lon) > 100);
   if (me && (force || moved || Date.now() - lastDevPost > 120000)) {
-    meta['dev_' + TWIN_ID] = { color: devColor(), lat: Math.round(me.lat * 1e5) / 1e5, lon: Math.round(me.lon * 1e5) / 1e5, acc: Math.round(me.acc || 0), t: me.t || Date.now(), app: Boolean(window.FieldTwinNative) };
+    meta['dev_' + TWIN_ID] = { color: devColor(), lat: Math.round(me.lat * 1e5) / 1e5, lon: Math.round(me.lon * 1e5) / 1e5, acc: Math.round(me.acc || 0), t: me.t || Date.now(), app: Boolean(window.DeliveryTwinNative) };
   }
   const h = homeGet();
   let info = null;
@@ -5946,7 +6139,7 @@ async function devTick(force) {
     setStatus('home cleared');
   });
   const start = () => { devTick(true); setInterval(() => devTick(false), 60000); };
-  if (window.fieldTwinReady && window.fieldTwinReady.then) window.fieldTwinReady.then(start, start); else setTimeout(start, 3000);
+  if (window.deliveryTwinReady && window.deliveryTwinReady.then) window.deliveryTwinReady.then(start, start); else setTimeout(start, 3000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') devTick(true); });
 })();
 </script>
@@ -5984,7 +6177,7 @@ function showTimeline(dk) {
     const inBlock = list.filter(e => { const x = new Date(e.timestamp).getTime(); return x >= t && x < end; });
     const parked = stops.filter(e => { const [a, b] = stopSpan(e); return a < end && b > t; });
     let gpsMi = 0;
-    if (window.FieldTwinNative && typeof gpsAt === 'function' && t < Date.now()) {
+    if (window.DeliveryTwinNative && typeof gpsAt === 'function' && t < Date.now()) {
       const g1 = gpsAt(t), g2 = end > Date.now() ? gpsNowMeters() : gpsAt(end);
       if (g1 >= 0 && g2 >= g1) gpsMi = (g2 - g1) / 1609.344 * (cal.count ? cal.factor : 1);
     }
@@ -6043,7 +6236,7 @@ document.getElementById('timelineBtn').addEventListener('click', () => {
 // The day starts at the day start point. Tickets are the stops work sent you to, matched to pins.
 // A stop with no odometer reading is filled from the real readings before and after it, using the
 // driving miles learned from your own odometer between places. Confirmed days lock and sync like entries.
-const DM_START_KEY = 'fieldTwinDayStart', DM_MARGIN_KEY = 'fieldTwinDmMargin';
+const DM_START_KEY = 'deliveryTwinDayStart', DM_MARGIN_KEY = 'deliveryTwinDmMargin';
 const DM_NEAR_M = 400, DM_PAIR_M = 600;
 const DM_SKIP = ['receipt', 'odometer', 'debrief', 'mileday', 'none'];
 const DM_WORK = ['amazon_locker', 'warehouse', 'printer_site'];
@@ -6271,7 +6464,7 @@ function dmNights() {
 // Leg check: for each drive from the day start to a ticket, or from one ticket to the next, compare what the odometer
 // went with the road route between the two addresses. A leg that ran well over the road route is flagged with any
 // side stops logged on the way, such as lunch, so you can look at it before you send business miles.
-const DM_ROAD_KEY = 'fieldTwinRoadMiles';
+const DM_ROAD_KEY = 'deliveryTwinRoadMiles';
 function dmRoadCache() { try { return JSON.parse(localStorage.getItem(DM_ROAD_KEY) || '{}') || {}; } catch (e) { return {}; } }
 async function dmRoadMiles(a, b) {
   const k = [a.lat, a.lon, b.lat, b.lon].map(v => Number(v).toFixed(4)).join(',');
@@ -6393,7 +6586,7 @@ function showDailyMiles() {
       if (s.locked) rows.push([dk, s.start, s.end, s.end - s.start, s.business, Math.round((s.end - s.start - s.business) * 10) / 10, n ? n.miles : '']);
     });
     if (rows.length < 2) { setStatus('confirm a day first'); return; }
-    saveTextFile('field-twin-daily-miles-' + localDay(new Date()) + '.csv', 'text/csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
+    saveTextFile('delivery-twin-daily-miles-' + localDay(new Date()) + '.csv', 'text/csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
   });
 }
 
@@ -6756,8 +6949,8 @@ function navWords(s) {
 // Hands the destination to the phone maps app for turn by turn driving there.
 function openGoogleMaps(dest) {
   const url = 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + encodeURIComponent(dest.lat + ',' + dest.lon);
-  if (window.FieldTwinNative && typeof window.FieldTwinNative.openUrl === 'function') {
-    try { window.FieldTwinNative.openUrl(url); return; } catch (e) {}
+  if (window.DeliveryTwinNative && typeof window.DeliveryTwinNative.openUrl === 'function') {
+    try { window.DeliveryTwinNative.openUrl(url); return; } catch (e) {}
   }
   const w = window.open(url, '_blank', 'noopener');
   if (!w) window.location.href = url;
@@ -6790,11 +6983,11 @@ async function navDraw(from) {
 }
 // Floating window (picture in picture) for the phone app: only the map and the next turn show while it floats.
 function ftEnterPip() {
-  try { if (window.FieldTwinNative && window.FieldTwinNative.enterPip()) return; } catch (e) {}
+  try { if (window.DeliveryTwinNative && window.DeliveryTwinNative.enterPip()) return; } catch (e) {}
   setStatus('floating window is not available on this phone');
 }
 function ftPipAuto() {
-  try { if (window.FieldTwinNative && typeof window.FieldTwinNative.setAutoPip === 'function') window.FieldTwinNative.setAutoPip(!!navState); } catch (e) {}
+  try { if (window.DeliveryTwinNative && typeof window.DeliveryTwinNative.setAutoPip === 'function') window.DeliveryTwinNative.setAutoPip(!!navState); } catch (e) {}
 }
 window.ftPip = function (on) {
   ftPipOn = !!on;
@@ -6809,7 +7002,7 @@ function ftPipSize() {
   const m = document.getElementById('map');
   if (!ftPipOn) { m.style.cssText = ''; const nb = document.getElementById('navBanner'); if (nb) nb.style.width = ''; return; }
   let w = 0, h = 0;
-  try { const z = String(window.FieldTwinNative.pipSize()).split(','); w = +z[0]; h = +z[1]; } catch (e) {}
+  try { const z = String(window.DeliveryTwinNative.pipSize()).split(','); w = +z[0]; h = +z[1]; } catch (e) {}
   if (!(w > 0 && h > 0)) { w = window.innerWidth; h = window.innerHeight; }
   m.style.cssText = 'position:fixed;left:0;top:0;right:auto;bottom:auto;width:' + w + 'px;height:' + h + 'px;z-index:1;';
   const b = document.getElementById('navBanner');
@@ -6818,8 +7011,8 @@ function ftPipSize() {
 // Checks with the phone every second whether the app is floating, in case the phone's own notice does not reach the page.
 setInterval(() => {
   try {
-    if (!window.FieldTwinNative || typeof window.FieldTwinNative.isPip !== 'function') return;
-    const on = !!window.FieldTwinNative.isPip();
+    if (!window.DeliveryTwinNative || typeof window.DeliveryTwinNative.isPip !== 'function') return;
+    const on = !!window.DeliveryTwinNative.isPip();
     if (on !== ftPipOn) window.ftPip(on);
     else if (on) { const before = document.getElementById('map').style.width; ftPipSize(); if (document.getElementById('map').style.width !== before) ftPipCenter(); }
   } catch (e) {}
@@ -6907,7 +7100,7 @@ document.getElementById('goDockBtn').addEventListener('click', showGo);
 </script>
 <script>
 // Places: named lockers, plus spots you drove to or picked in GO. GO lists these first, ranked by how often you
-// arrived, picked or logged there. Saved on this phone and in the cloud table field_twin_places for your other phones.
+// arrived, picked or logged there. Saved on this phone and in the cloud table delivery_twin_places for your other phones.
 let ftPlaces = [];
 try { ftPlaces = JSON.parse(localStorage.getItem('ftPlaces') || '[]') || []; } catch (e) { ftPlaces = []; }
 function ftpSaveLocal() { try { localStorage.setItem('ftPlaces', JSON.stringify(ftPlaces)); } catch (e) {} }
@@ -6926,13 +7119,13 @@ async function ftpPush(p) {
   p.updated_at = new Date().toISOString();
   ftpSaveLocal();
   if (typeof cloudReady !== 'function' || !cloudReady()) { p.dirty = true; ftpSaveLocal(); return; }
-  try { const r = await sb.from('field_twin_places').upsert(ftpRow(p), { onConflict: 'id' }); p.dirty = !!r.error; } catch (e) { p.dirty = true; }
+  try { const r = await sb.from('delivery_twin_places').upsert(ftpRow(p), { onConflict: 'id' }); p.dirty = !!r.error; } catch (e) { p.dirty = true; }
   ftpSaveLocal();
 }
 async function ftpPull() {
   if (typeof cloudReady !== 'function' || !cloudReady()) return;
   try {
-    const r = await sb.from('field_twin_places').select('*').range(0, 4999);
+    const r = await sb.from('delivery_twin_places').select('*').range(0, 4999);
     if (r.error) return;
     const byId = {};
     ftPlaces.forEach(p => { byId[p.id] = p; });
@@ -7030,7 +7223,7 @@ function ftpTop(pool) {
 
 
 // Photo archive: every photo goes straight up to the photos storage in the cloud, listed in the table
-// field_twin_photos with the entry or locker it belongs to. A photo waits on this phone only until it uploads.
+// delivery_twin_photos with the entry or locker it belongs to. A photo waits on this phone only until it uploads.
 let ftPhotos = [];
 try { ftPhotos = JSON.parse(localStorage.getItem('ftPhotos') || '[]') || []; } catch (e) { ftPhotos = []; }
 function ftphSave() { try { localStorage.setItem('ftPhotos', JSON.stringify(ftPhotos)); } catch (e) {} }
@@ -7040,9 +7233,9 @@ async function ftphUploadOne(ph) {
   if (!data) return;
   const path = cloudUser.id + '/extra/' + ph.id + '.jpg';
   try {
-    const up = await sb.storage.from('photos').upload(path, dataUrlToBlob(data), { upsert: true, contentType: 'image/jpeg' });
+    const up = await sb.storage.from('delivery-twin-photos').upload(path, dataUrlToBlob(data), { upsert: true, contentType: 'image/jpeg' });
     if (up.error) return;
-    const row = await sb.from('field_twin_photos').upsert({ id: ph.id, entry_id: ph.entry_id || null, place_id: ph.place_id || null, path: path, lat: ph.lat, lon: ph.lon, ts: ph.ts }, { onConflict: 'id' });
+    const row = await sb.from('delivery_twin_photos').upsert({ id: ph.id, entry_id: ph.entry_id || null, place_id: ph.place_id || null, path: path, lat: ph.lat, lon: ph.lon, ts: ph.ts }, { onConflict: 'id' });
     if (row.error) return;
     ph.path = path;
     ph.pending = false;
@@ -7071,7 +7264,7 @@ async function ftphPull() {
   try {
     const out = [];
     for (let from = 0; from < 50000; from += 1000) {
-      const r = await sb.from('field_twin_photos').select('*').range(from, from + 999);
+      const r = await sb.from('delivery_twin_photos').select('*').range(from, from + 999);
       if (r.error) return;
       out.push(...(r.data || []));
       if ((r.data || []).length < 1000) break;
@@ -7123,7 +7316,7 @@ function ftphView(ph) {
 // so ask for it and have the next tap take the photo.
 function ftCameraReady() {
   try {
-    const n = window.FieldTwinNative;
+    const n = window.DeliveryTwinNative;
     if (n && typeof n.hasCamera === 'function' && !n.hasCamera()) { n.askCamera(); setStatus('allow the camera, then tap the photo button again'); return false; }
   } catch (e) {}
   return true;
@@ -7173,12 +7366,12 @@ async function ftTeamSync() {
       const mine = ftPlaces.filter(p => p.kind === 'locker' && p.source !== 'team');
       for (let i = 0; i < mine.length; i += 200) {
         const rows = mine.slice(i, i + 200).map(p => ({ id: p.id, name: p.name || '', lat: p.lat, lon: p.lon, address: p.address || '', updated_at: new Date().toISOString() }));
-        await sb.from('field_twin_team_lockers').upsert(rows, { onConflict: 'id' });
+        await sb.from('delivery_twin_team_lockers').upsert(rows, { onConflict: 'id' });
       }
     }
     const all = [];
     for (let from = 0; from < 20000; from += 1000) {
-      const res = await fetch(FT_TEAM_URL + '/rest/v1/field_twin_team_lockers?select=id,name,lat,lon,address&order=id', {
+      const res = await fetch(FT_TEAM_URL + '/rest/v1/delivery_twin_team_lockers?select=id,name,lat,lon,address&order=id', {
         headers: { apikey: FT_TEAM_KEY, Authorization: 'Bearer ' + FT_TEAM_KEY, Range: from + '-' + (from + 999) } });
       if (!res.ok) { setStatus('team locker list is not set up yet'); return; }
       const rows = await res.json();
@@ -7254,7 +7447,7 @@ setTimeout(() => { setToggle('teamLockersBtn', ftTeamOn); if (ftTeamOn) ftTeamSy
 // phone's for following the route, and its road roughness readings are saved with where they were measured.
 let ftcOn = false, ftcState = 'off', ftcPos = null, ftcRoad = [];
 try { ftcOn = localStorage.getItem('ftcOn') === '1'; ftcRoad = JSON.parse(localStorage.getItem('ftcRoad') || '[]') || []; } catch (e) {}
-function ftcNative() { return window.FieldTwinNative && typeof window.FieldTwinNative.companionStart === 'function'; }
+function ftcNative() { return window.DeliveryTwinNative && typeof window.DeliveryTwinNative.companionStart === 'function'; }
 function ftcText() {
   const el = document.getElementById('companionText');
   if (!el) return;
@@ -7266,12 +7459,12 @@ function ftcSet(on) {
   try { localStorage.setItem('ftcOn', on ? '1' : '0'); } catch (e) {}
   setToggle('companionBtn', on);
   if (!ftcNative()) return;
-  try { ftcState = on ? String(window.FieldTwinNative.companionState() || 'searching') : 'off'; } catch (e) { ftcState = on ? 'searching' : 'off'; }
+  try { ftcState = on ? String(window.DeliveryTwinNative.companionState() || 'searching') : 'off'; } catch (e) { ftcState = on ? 'searching' : 'off'; }
   if (on && ftcState === 'off') ftcState = 'searching';
-  try { if (on) window.FieldTwinNative.companionStart(); else window.FieldTwinNative.companionStop(); } catch (e) {}
+  try { if (on) window.DeliveryTwinNative.companionStart(); else window.DeliveryTwinNative.companionStop(); } catch (e) {}
   ftcText();
 }
-function ftcSend(cmd) { if (ftcOn && ftcState === 'linked' && ftcNative()) { try { window.FieldTwinNative.companionSend(cmd); } catch (e) {} } }
+function ftcSend(cmd) { if (ftcOn && ftcState === 'linked' && ftcNative()) { try { window.DeliveryTwinNative.companionSend(cmd); } catch (e) {} } }
 function ftcClean(t) { return String(t || '').replace(/[|;\n\r]/g, ' ').slice(0, 60); }
 // Sends the whole route: line points in small batches, then each turn, then start.
 function ftcSendRoute() {
@@ -7623,7 +7816,7 @@ function showLocker(p) {
 }
 
 // Locker site for Parcelsun: door count, module count, generation, placement, which way the front faces, and the
-// walls or buildings that shade it. Kept on the locker in p.site and synced in field_twin_places. Facing and blockers
+// walls or buildings that shade it. Kept on the locker in p.site and synced in delivery_twin_places. Facing and blockers
 // are measured with the phone: the compass gives the bearing the back of the phone points, the tilt gives the angle up.
 const FTS_GENS = [['', 'Not set'], ['v2', 'Generation 2, screen and keypad'], ['v3', 'Generation 3, screen and keypad'], ['v4', 'Generation 4, Bluetooth phone only'], ['v5', 'Generation 5, Bluetooth phone only']];
 const FTS_PLACES = [['', 'Not set'], ['none', 'Outdoors, open sky'], ['awning', 'Outdoors, awning over the front'], ['full', 'Outdoors, full shade structure'], ['indoor', 'Indoors, in a lobby']];
@@ -7735,7 +7928,7 @@ function ftsSiteBind(p) {
     const bytes = new TextEncoder().encode(JSON.stringify(d));
     let bin = ''; bytes.forEach(c => { bin += String.fromCharCode(c); });
     const url = PARCELSUN_URL + '#ft=' + btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    if (window.FieldTwinNative && typeof window.FieldTwinNative.openUrl === 'function') { try { window.FieldTwinNative.openUrl(url); return; } catch (e) {} }
+    if (window.DeliveryTwinNative && typeof window.DeliveryTwinNative.openUrl === 'function') { try { window.DeliveryTwinNative.openUrl(url); return; } catch (e) {} }
     const w = window.open(url, '_blank', 'noopener');
     if (!w) window.location.href = url;
   });
@@ -7860,7 +8053,7 @@ function ftsAim(p, mode, done) {
 // are, worked out from the date and your last known spot, or by the clock when there is no spot yet. The menu
 // button steps through automatic, always on and always off, and the choice is kept on this phone. The inventory
 // tab is told whenever it changes so it matches.
-const NIGHT_KEY = 'fieldTwinNight', NIGHT_SPOT_KEY = 'fieldTwinNightSpot';
+const NIGHT_KEY = 'deliveryTwinNight', NIGHT_SPOT_KEY = 'deliveryTwinNightSpot';
 function sunTimes(lat, lon, d) {
   const rad = Math.PI / 180;
   const base = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());

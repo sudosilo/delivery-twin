@@ -26,9 +26,9 @@ import androidx.core.content.ContextCompat
 import org.json.JSONObject
 import java.util.UUID
 
-// Bluetooth link to the Field Twin Companion dashboard screen. Finds the board named FT Companion, keeps the link,
+// Bluetooth link to the Delivery Twin Companion dashboard screen. Finds the board named FT Companion, keeps the link,
 // sends it route and turn commands one at a time, and hands its GPS and road readings to the page.
-object FieldTwinCompanion {
+object DeliveryTwinCompanion {
   val SERVICE: UUID = UUID.fromString("b2f0a001-6c1e-4f2a-9d4b-667477000001")
   val NAV: UUID = UUID.fromString("b2f0a001-6c1e-4f2a-9d4b-667477000002")
   val POS: UUID = UUID.fromString("b2f0a001-6c1e-4f2a-9d4b-667477000003")
@@ -50,7 +50,7 @@ object FieldTwinCompanion {
 
   private fun toPage(kind: String, text: String) {
     val js = "window.ftCompanionIn && window.ftCompanionIn(" + JSONObject.quote(kind) + "," + JSONObject.quote(text) + ")"
-    main.post { try { FieldTwinBridge.web?.evaluateJavascript(js, null) } catch (e: Exception) {} }
+    main.post { try { DeliveryTwinBridge.web?.evaluateJavascript(js, null) } catch (e: Exception) {} }
   }
   private fun announce(s: String) { state = s; toPage("state", s) }
 
@@ -77,7 +77,7 @@ object FieldTwinCompanion {
   fun start(activity: Activity) {
     ctx = activity.applicationContext
     wanted = true
-    FieldTwinCompanionUsb.watch(activity)
+    DeliveryTwinCompanionUsb.watch(activity)
     if (gatt != null) { announce(state); return }
     val need = permsNeeded(activity)
     if (need.isNotEmpty()) { announce("asking"); ActivityCompat.requestPermissions(activity, need, PERM_CODE); return }
@@ -92,7 +92,7 @@ object FieldTwinCompanion {
   @SuppressLint("MissingPermission")
   fun stop() {
     wanted = false
-    FieldTwinCompanionUsb.stopWatching()
+    DeliveryTwinCompanionUsb.stopWatching()
     try { stopScan() } catch (e: Exception) {}
     try { gatt?.disconnect(); gatt?.close() } catch (e: Exception) {}
     gatt = null; nav = null; queue.clear(); busy = false
@@ -203,7 +203,7 @@ object FieldTwinCompanion {
 
   // Commands go out one at a time; the next leaves when the board confirms the last one.
   fun send(cmd: String) {
-    if (FieldTwinCompanionUsb.open) { usbExec.execute { FieldTwinCompanionUsb.write(cmd) }; return }
+    if (DeliveryTwinCompanionUsb.open) { usbExec.execute { DeliveryTwinCompanionUsb.write(cmd) }; return }
     val b = cmd.toByteArray(Charsets.UTF_8)
     main.post {
       if (queue.size > 400) queue.clear()

@@ -4,15 +4,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 const NDOT_KEY = process.env.NDOT_KEY || '';
-const CACHE_KEY = 'fieldtwin:cameras';
+const CACHE_KEY = 'deliverytwin:cameras';
 const CACHE_TTL = 60 * 60 * 6;
 const ALLOWED = (process.env.ALLOWED_ORIGINS || '*')
   .split(',')
   .map(s => s.trim())
   .filter(Boolean);
 
-// The Field Twin phone app loads from these addresses and is always allowed.
-const APP_ORIGINS = ['http://tauri.localhost', 'https://tauri.localhost', 'tauri://localhost', 'https://field-twin-teal.vercel.app'];
+// The Delivery Twin phone app loads from these addresses and is always allowed.
+const APP_ORIGINS = ['http://tauri.localhost', 'https://tauri.localhost', 'tauri://localhost', 'https://delivery-twin-teal.vercel.app'];
 
 process.on('unhandledRejection', err => {
   console.error('unhandled rejection', err && err.message ? err.message : err);
@@ -236,7 +236,7 @@ const DEBRIEF_MODEL = process.env.DEBRIEF_MODEL || 'claude-sonnet-5-5';
 const DEBRIEF_PROMPT = [
   'You are writing the end of day debrief for a field service technician who repairs parcel lockers around Las Vegas.',
   'His workday usually starts from 550 Conestoga Way in Henderson, and he commutes there from a desert camp in Arizona.',
-  'Below is the day log from his location logging app, Field Twin: a summary, a timeline of entries with the place tag he chose for each, odometer readings, receipts, and things the app flagged as not captured.',
+  'Below is the day log from his location logging app, Delivery Twin: a summary, a timeline of entries with the place tag he chose for each, odometer readings, receipts, and things the app flagged as not captured.',
   'Some days also include his earlier debriefs and his replies to them; use those to compare this day against past days and to remember what he already explained.',
   'Write the debrief as plain prose paragraphs. No headings, no bullet points, no numbered lists, no bold, no em dashes or en dashes.',
   'He listens to this read aloud, so keep figures few and rounded, and say them in words, like about forty miles or a little over two hours. Never write digits.',
@@ -333,14 +333,14 @@ app.post('/destination', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.json({ service: 'fieldtwin-api', endpoints: ['/health', '/cameras', '/status', '/receipts/extract', '/debrief', '/events', '/crashes'] });
+  res.json({ service: 'deliverytwin-api', endpoints: ['/health', '/cameras', '/status', '/receipts/extract', '/debrief', '/events', '/crashes'] });
 });
 
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const PROBE_TIMEOUT_MS = 8000;
 const PROBE_CONCURRENCY = 8;
-const SWEEP_KEY = 'fieldtwin:sweep';
-const LOCK_KEY = 'fieldtwin:sweep:lock';
+const SWEEP_KEY = 'deliverytwin:sweep';
+const LOCK_KEY = 'deliverytwin:sweep:lock';
 const LOCK_TTL_SEC = 120;
 const LOCK_RENEW_MS = 30000;
 const MAX_PASSES = 3;
@@ -602,10 +602,10 @@ app.get('/cameras/refresh', async (req, res) => {
 });
 
 const AZ511_KEY = process.env.AZ511_KEY || '';
-const EVENTS_HASH = 'fieldtwin:events';
-const EVENTS_SEEN = 'fieldtwin:events:seen';
-const EVENTS_LOCK = 'fieldtwin:events:lock';
-const EVENTS_STATE = 'fieldtwin:events:state';
+const EVENTS_HASH = 'deliverytwin:events';
+const EVENTS_SEEN = 'deliverytwin:events:seen';
+const EVENTS_LOCK = 'deliverytwin:events:lock';
+const EVENTS_STATE = 'deliverytwin:events:state';
 const EVENT_POLL_MS = 10 * 60 * 1000;
 const EVENT_KEEP_DAYS = 730;
 const memEvents = new Map();
@@ -757,7 +757,7 @@ app.get('/events', async (req, res) => {
   }
 });
 
-const CRASH_CACHE = 'fieldtwin:crashes:v1';
+const CRASH_CACHE = 'deliverytwin:crashes:v1';
 const CRASH_TTL = 7 * 86400;
 const CRASH_STATES = { nv: 32, az: 4 };
 let crashMem = null;
@@ -847,7 +847,7 @@ app.get('/crashes', async (req, res) => {
 });
 
 app.listen(PORT, HOST, () => {
-  console.log('fieldtwin-api listening on ' + HOST + ':' + PORT);
+  console.log('deliverytwin-api listening on ' + HOST + ':' + PORT);
   sweepLoad().then(() => {
     setTimeout(() => runHealthCheck(false), 15000);
     setInterval(() => runHealthCheck(false), 60 * 60 * 1000);

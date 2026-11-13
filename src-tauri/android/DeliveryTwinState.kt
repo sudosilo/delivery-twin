@@ -9,12 +9,12 @@ import java.util.Calendar
 import kotlin.random.Random
 
 // Stored state shared by the tracking service and the page bridge.
-object FieldTwinState {
+object DeliveryTwinState {
   val lock = Any()
   const val ODO_NOTE_ID = 7702
 
   fun prefs(ctx: Context): SharedPreferences =
-    ctx.applicationContext.getSharedPreferences("fieldtwin_native", Context.MODE_PRIVATE)
+    ctx.applicationContext.getSharedPreferences("deliverytwin_native", Context.MODE_PRIVATE)
 
   fun dayKey(t: Long): String {
     val c = Calendar.getInstance()

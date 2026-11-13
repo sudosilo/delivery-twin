@@ -11,15 +11,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 
-// Field Twin main screen: hands the page a FieldTwinNative object and passes odometer prompt taps through.
+// Delivery Twin main screen: hands the page a DeliveryTwinNative object and passes odometer prompt taps through.
 class MainActivity : TauriActivity() {
   private var reloadedForBridge = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     keepClearOfStatusBar()
-    FieldTwinBridge.takeIntent(this, intent)
-    if (FieldTwinState.prefs(this).getBoolean("trackingOn", true)) FieldTwinBridge.askAndStart(this)
+    DeliveryTwinBridge.takeIntent(this, intent)
+    if (DeliveryTwinState.prefs(this).getBoolean("trackingOn", true)) DeliveryTwinBridge.askAndStart(this)
   }
 
   // Pushes the page below the camera cutout and status bar, and above the gesture bar and the keyboard while it is open.
@@ -44,7 +44,7 @@ class MainActivity : TauriActivity() {
   // Leaving the app while a route is running shrinks it to the floating window instead of hiding it.
   override fun onUserLeaveHint() {
     super.onUserLeaveHint()
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O && FieldTwinState.prefs(this).getBoolean("autoPip", false)) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O && DeliveryTwinState.prefs(this).getBoolean("autoPip", false)) {
       try {
         enterPictureInPictureMode(android.app.PictureInPictureParams.Builder().setAspectRatio(android.util.Rational(3, 4)).build())
       } catch (e: Exception) {}
@@ -54,7 +54,7 @@ class MainActivity : TauriActivity() {
   // Android pauses the page when the app loses focus, which freezes the floating window on its last full size frame.
   // While floating, the page keeps drawing and running so it can shrink to the window and follow the route.
   private fun keepPageRunning() {
-    val w = FieldTwinBridge.web ?: return
+    val w = DeliveryTwinBridge.web ?: return
     try {
       w.onResume()
       w.resumeTimers()
@@ -77,13 +77,13 @@ class MainActivity : TauriActivity() {
     val root = findViewById<android.view.View>(android.R.id.content)
     if (isInPictureInPictureMode) root.setPadding(0, 0, 0, 0) else ViewCompat.requestApplyInsets(root)
     keepPageRunning()
-    FieldTwinBridge.web?.evaluateJavascript("window.ftPip && window.ftPip(" + isInPictureInPictureMode + ")", null)
+    DeliveryTwinBridge.web?.evaluateJavascript("window.ftPip && window.ftPip(" + isInPictureInPictureMode + ")", null)
   }
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     setIntent(intent)
-    FieldTwinBridge.takeIntent(this, intent)
+    DeliveryTwinBridge.takeIntent(this, intent)
   }
 
   override fun onWebViewCreate(webView: WebView) {
@@ -96,10 +96,10 @@ class MainActivity : TauriActivity() {
       webView.settings.domStorageEnabled = true
       webView.settings.databaseEnabled = true
     } catch (e: Exception) {}
-    FieldTwinBridge.web = webView
-    webView.addJavascriptInterface(FieldTwinBridge(this), "FieldTwinNative")
+    DeliveryTwinBridge.web = webView
+    webView.addJavascriptInterface(DeliveryTwinBridge(this), "DeliveryTwinNative")
     Handler(Looper.getMainLooper()).postDelayed({
-      if (!FieldTwinBridge.helloSeen && !reloadedForBridge) {
+      if (!DeliveryTwinBridge.helloSeen && !reloadedForBridge) {
         reloadedForBridge = true
         webView.reload()
       }
@@ -108,7 +108,7 @@ class MainActivity : TauriActivity() {
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (requestCode == FieldTwinBridge.PERM_CODE) FieldTwinBridge.startIfAllowed(this)
-    if (requestCode == FieldTwinCompanion.PERM_CODE) FieldTwinCompanion.afterPermission(this)
+    if (requestCode == DeliveryTwinBridge.PERM_CODE) DeliveryTwinBridge.startIfAllowed(this)
+    if (requestCode == DeliveryTwinCompanion.PERM_CODE) DeliveryTwinCompanion.afterPermission(this)
   }
 }
