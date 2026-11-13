@@ -1,0 +1,2 @@
+set -e
+sed -i -e "s|^  <h3>Color key</h3>$|  <h3>Games</h3>\n  <button class=\"secondary\" id=\"fieldDispatchBtn\" onclick=\"window.open('https://2026-11-04-field-dispatch.vercel.app/', '_blank', 'noopener')\">Field Dispatch</button>\n  <h3>Map</h3>\n  <button class=\"secondary\" id=\"legendBtn\" onclick=\"var r = document.getElementById('legendRows'); r.style.display = r.style.display === 'none' ? 'block' : 'none';\">Color key</button>|" -e 's|^  <div id="legendRows"></div>$|  <div id="legendRows" style="display:none"></div>|' index.html
