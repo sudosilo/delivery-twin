@@ -851,7 +851,7 @@
 <div id="twinTabs">
   <button id="tabTeal" class="on">Field map</button>
   <button id="tabViolet">Inventory</button>
-  <button id="tabRoads">Roads</button>
+  <button id="tabRoads">Offers</button>
 </div>
 <div id="violetView"></div>
 
@@ -4051,8 +4051,8 @@ function showMileage() {
 const CQ_URL = 'https://vogxdikogfaxhwcgajfg.supabase.co';
 const CQ_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvZ3hkaWtvZ2ZheGh3Y2dhamZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzOTk4MDAsImV4cCI6MjEwNjk3NTgwMH0.fUosu3JdsUI5GFnQjDbOxfYCWO1hfijQO3O8lJVsU98';
 const CQ_SITE = 'https://field-twin-glaucous.vercel.app/';
-const VIOLET_SITE = 'https://field-twin-violet.vercel.app/';
-const VIOLET_ORIGIN = 'https://field-twin-violet.vercel.app';
+const VIOLET_SITE = 'https://delivery-twin-violet.vercel.app/';
+const VIOLET_ORIGIN = 'https://delivery-twin-violet.vercel.app';
 
 // One sign in for all three Delivery Twin apps. Violet uses this same account system, Glaucous has its own
 // with the same email and password. Each app gets its own fresh login, held here until that app opens.
@@ -4118,16 +4118,16 @@ function twinSendViolet() {
   const w = twinVioletFrame();
   if (!w) return;
   const h = twinHand();
-  if (h.violet) w.postMessage({ type: 'fieldtwin-session', at: h.violet.at, rt: h.violet.rt, email: h.violet.email }, VIOLET_ORIGIN);
+  if (h.violet) w.postMessage({ type: 'deliverytwin-session', at: h.violet.at, rt: h.violet.rt, email: h.violet.email }, VIOLET_ORIGIN);
   else if (h.violetOut) w.postMessage({ type: 'deliverytwin-signout' }, VIOLET_ORIGIN);
 }
 window.addEventListener('message', e => {
   if (e.origin !== VIOLET_ORIGIN || !e.data || typeof e.data !== 'object') return;
   const h = twinHand();
   if (e.data.type === 'deliverytwin-ready') twinSendViolet();
-  else if (e.data.type === 'fieldtwin-session-ok') { delete h.violet; twinHandSave(h); }
+  else if (e.data.type === 'deliverytwin-session-ok') { delete h.violet; twinHandSave(h); }
   else if (e.data.type === 'deliverytwin-signout-ok') { delete h.violetOut; twinHandSave(h); }
-  else if (e.data.type === 'fieldtwin-session-fail') setStatus('Inventory sign in failed, ' + String(e.data.message || 'no reason given').slice(0, 80));
+  else if (e.data.type === 'deliverytwin-session-fail') setStatus('Inventory sign in failed, ' + String(e.data.message || 'no reason given').slice(0, 80));
 });
 // Opens Glaucous and hands it the waiting login, or the sign out, in the part of the address that never leaves the phone.
 function openGlaucous() {
@@ -6325,12 +6325,13 @@ window.deliveryTwinReady = init();
     if (!inv && typeof map !== 'undefined' && map && map.invalidateSize) setTimeout(() => map.invalidateSize(), 50);
   }
   teal.addEventListener('click', () => show('teal'));
-  document.getElementById('tabRoads').addEventListener('click', openGlaucous);
+  document.getElementById('tabRoads').addEventListener('click', () => { show('teal'); showOffers(); });
   violet.addEventListener('click', () => show('violet'));
   let start = 'teal';
   try { start = localStorage.getItem(TAB_KEY) || 'teal'; } catch (e) {}
   if (location.hash === '#map') start = 'teal';
   if (location.hash === '#inventory') start = 'violet';
+  if (location.hash === '#offers') { start = 'teal'; setTimeout(showOffers, 1500); }
   show(start);
 })();
 </script>
