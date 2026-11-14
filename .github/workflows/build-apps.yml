@@ -61,9 +61,9 @@ jobs:
             npm init -y > /dev/null
             npm pkg set scripts.tauri=tauri
             npm install --no-save @tauri-apps/cli@2
-            npm run tauri -- icon src-tauri/app-icon.png
+            npm run tauri -- icon src-tauri/app-icon.svg
             npm run tauri -- android init --ci
-            npm run tauri -- icon src-tauri/app-icon.png
+            npm run tauri -- icon src-tauri/app-icon.svg
             node src-tauri/scripts/patch-android.cjs
             npm run tauri -- android build --apk --target aarch64 --target armv7
           } 2>&1 | tee android-build.log
