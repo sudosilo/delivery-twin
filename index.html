@@ -849,7 +849,7 @@
 </header>
 
 <div id="twinTabs">
-  <button id="tabTeal" class="on">Field map</button>
+  <button id="tabTeal" class="on">Map</button>
   <button id="tabViolet">Inventory</button>
   <button id="tabRoads">Offers</button>
 </div>
@@ -892,12 +892,12 @@
   <button class="secondary tg" id="hzCrashBtn" style="display:none" aria-pressed="false"><span>Crashes</span><i class="tg-sw" aria-hidden="true"></i></button>
   <button class="secondary tg" id="hzWorkBtn" style="display:none" aria-pressed="false"><span>Construction</span><i class="tg-sw" aria-hidden="true"></i></button>
   <button class="secondary tg" id="hzFatalBtn" style="display:none" aria-pressed="false"><span>Crash history</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <h3>Field chat</h3>
-  <button class="secondary tg" id="fieldChatBtn" aria-pressed="false"><span>Field Chat alerts</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <button class="secondary" id="fieldChatOpen">Open Field Chat</button>
-  <h3>Companion screen</h3>
-  <button class="secondary tg native-only" id="companionBtn" aria-pressed="false" hidden><span>FT Companion</span><i class="tg-sw" aria-hidden="true"></i></button>
-  <div class="hz-label native-only" id="companionText" hidden>Off.</div>
+  <h3>Driver chat</h3>
+  <button class="secondary tg" id="fieldChatBtn" aria-pressed="false"><span>Driver Chat alerts</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <button class="secondary" id="fieldChatOpen">Open Driver Chat</button>
+  <h3 style="display:none">Companion screen</h3>
+  <button class="secondary tg native-only" id="companionBtn" aria-pressed="false" hidden style="display:none"><span>Companion</span><i class="tg-sw" aria-hidden="true"></i></button>
+  <div class="hz-label native-only" id="companionText" hidden style="display:none">Off.</div>
   <h3 style="display:none">Lockers</h3>
   <button class="secondary tg" id="teamLockersBtn" aria-pressed="false" style="display:none"><span>All lockers</span><i class="tg-sw" aria-hidden="true"></i></button>
   <button class="secondary" id="lockersBtn" style="display:none">Lockers</button>
@@ -912,8 +912,8 @@
   <button class="secondary" id="dailyMilesBtn">Daily miles</button>
   <h3>Traffic cameras</h3>
   <button class="secondary" id="camerasBtn">Cameras</button>
-  <h3>Other apps</h3>
-  <div class="ext-row"><button class="ext" id="openCqBtn">Delivery Twin Glaucous</button><button class="ext" id="openVioletBtn">Delivery Twin Violet</button></div>
+  <h3 style="display:none">Other apps</h3>
+  <div class="ext-row" style="display:none"><button class="ext" id="openCqBtn">Delivery Twin Glaucous</button><button class="ext" id="openVioletBtn">Delivery Twin Violet</button></div>
   <h3>Your data</h3>
   <button class="secondary" id="accountBtn">Account and profile</button>
   <button class="secondary" id="exportBtn">Export</button>
@@ -1012,6 +1012,16 @@ const CATEGORIES = {
 // Place icons: one drawn set for every kind of place, so signs look the same on every phone. The glyphs come from
 // the Maki and Temaki map icon sets, both released to the public domain, plus three drawn for Delivery Twin.
 const ICON_ART = {"gas_station":{"v":"0 0 15 15","p":"<path d=\"m14 6v5.5c0 .2761-.2239.5-.5.5s-.5-.2239-.5-.5v-2c0-.8284-.6716-1.5-1.5-1.5h-1.5v-6c0-.5523-.4477-1-1-1h-6c-.5523 0-1 .4477-1 1v11c0 .5523.4477 1 1 1h6c.5523 0 1-.4477 1-1v-4h1.5c.2761 0 .5.2239.5.5v2c0 .8284.6716 1.5 1.5 1.5s1.5-.6716 1.5-1.5v-6.5c0-.5523-.4477-1-1-1v-1.51c-.0054-.2722-.2277-.4901-.5-.49-.2816.0047-.5062.2367-.5015.5184.0002.0105.0007.0211.0015.0316v2.45c0 .5523.4477 1 1 1s1-.4477 1-1-.4477-1-1-1zm-5 .5c0 .2761-.2239.5-.5.5h-5c-.2761 0-.5-.2239-.5-.5v-3c0-.2761.2239-.5.5-.5h5c.2761 0 .5.2239.5.5z\"/>"},"grocery":{"v":"0 0 15 15","p":"<path d=\"M 13.199219 1.5 C 13.199219 1.5 11.808806 1.4588 11.253906 2 C 10.720406 2.5202 10.5 2.9177 10.5 4 L 1.1992188 4 L 2.59375 8.8144531 C 2.59725 8.8217531 2.6036219 8.8287375 2.6074219 8.8359375 C 2.8418219 9.4932375 3.4545469 9.9666406 4.1855469 9.9941406 C 4.1885469 9.9954406 4.1992187 10 4.1992188 10 L 10.699219 10 L 10.699219 10.199219 C 10.699219 10.199219 10.7 10.500391 10.5 10.900391 C 10.3 11.300391 10.200391 11.5 9.4003906 11.5 L 2.9003906 11.5 C 1.9003906 11.5 1.9003906 13 2.9003906 13 L 4.0996094 13 L 4.1992188 13 L 9.0996094 13 L 9.1992188 13 L 9.3007812 13 C 10.500781 13 11.399219 12.299609 11.699219 11.599609 C 11.999219 10.899609 12 10.300781 12 10.300781 L 12 10 L 12 4 C 12 3.4764 12.228619 3 12.699219 3 L 13.25 3 C 13.6642 3 14 2.6642 14 2.25 C 14 1.8358 13.6642 1.5 13.25 1.5 L 13.199219 1.5 z M 9.1992188 13 C 8.5992188 13 8.1992188 13.4 8.1992188 14 C 8.1992188 14.6 8.5992187 15 9.1992188 15 C 9.7992187 15 10.199219 14.6 10.199219 14 C 10.199219 13.4 9.7992188 13 9.1992188 13 z M 4.1992188 13 C 3.5992188 13 3.1992188 13.4 3.1992188 14 C 3.1992188 14.6 3.5992187 15 4.1992188 15 C 4.7992188 15 5.1992188 14.6 5.1992188 14 C 5.1992188 13.4 4.7992187 13 4.1992188 13 z \"/>"},"fast_food":{"v":"0 0 15 15","p":"<path d=\"M14,8c0,0.5523-0.4477,1-1,1H2C1.4477,9,1,8.5523,1,8s0.4477-1,1-1h11C13.5523,7,14,7.4477,14,8z M3.5,10H2&#xA;&#x9;c0,1.6569,1.3431,3,3,3h5c1.6569,0,3-1.3431,3-3H3.5z M3,6H2V4c0-1.1046,0.8954-2,2-2h7c1.1046,0,2,0.8954,2,2v2H3z M11,4.5&#xA;&#x9;C11,4.7761,11.2239,5,11.5,5S12,4.7761,12,4.5S11.7761,4,11.5,4S11,4.2239,11,4.5z M9,3.5C9,3.7761,9.2239,4,9.5,4S10,3.7761,10,3.5&#xA;&#x9;S9.7761,3,9.5,3S9,3.2239,9,3.5z M7,4.5C7,4.7761,7.2239,5,7.5,5S8,4.7761,8,4.5S7.7761,4,7.5,4S7,4.2239,7,4.5z M5,3.5&#xA;&#x9;C5,3.7761,5.2239,4,5.5,4S6,3.7761,6,3.5S5.7761,3,5.5,3S5,3.2239,5,3.5z M3,4.5C3,4.7761,3.2239,5,3.5,5S4,4.7761,4,4.5&#xA;&#x9;S3.7761,4,3.5,4S3,4.2239,3,4.5z\"/>"},"amazon_locker":{"v":"0 0 15 15","p":"<path d=\"M14 1.5L14 13.5C14 13.78 13.78 14 13.5 14L1.5 14C1.22 14 1 13.78 1 13.5L1 1.5C1 1.22 1.22 1 1.5 1L13.5 1C13.78 1 14 1.22 14 1.5ZM13 5L10 5L10 8L13 8L13 5ZM11 9L10 9L10 10L11 10L11 9ZM13 9L12 9L12 10L13 10L13 9ZM2 5L2 7L5 7L5 5L2 5ZM2 8L2 10L5 10L5 8L2 8ZM2 11L2 13L5 13L5 11L2 11ZM6 11L6 13L9 13L9 11L6 11ZM6 8L6 10L9 10L9 8L6 8ZM6 5L6 7L9 7L9 5L6 5ZM6 2L6 4L9 4L9 2L6 2ZM5 2L2 2L2 4L5 4L5 2Z\"/>"},"coffee_shop":{"v":"0 0 15 15","p":"<path d=\"M12,5h-2V3H2v4c0.0133,2.2091,1.8149,3.9891,4.024,3.9758C7.4345,10.9673,8.7362,10.2166,9.45,9H12c1.1046,0,2-0.8954,2-2&#xA;&#x9;S13.1046,5,12,5z M12,8H9.86C9.9487,7.6739,9.9958,7.3379,10,7V6h2c0.5523,0,1,0.4477,1,1S12.5523,8,12,8z M10,12.5&#xA;&#x9;c0,0.2761-0.2239,0.5-0.5,0.5h-7C2.2239,13,2,12.7761,2,12.5S2.2239,12,2.5,12h7C9.7761,12,10,12.2239,10,12.5z\"/>"},"pharmacy":{"v":"0 0 15 15","p":"<path d=\"M9.5,4l1.07-1.54c0.0599,0.0046,0.1201,0.0046,0.18,0c0.6904-0.0004,1.2497-0.5603,1.2494-1.2506&#xA;&#x9;C11.999,0.519,11.4391-0.0404,10.7487-0.04C10.0584-0.0396,9.499,0.5203,9.4994,1.2106c0,0.0131,0.0002,0.0262,0.0006,0.0394&#xA;&#x9;c0,0,0,0.07,0,0.1L7,4H9.5z M12,6V5H3v1l1.5,3.5L3,13v1h9v-1l-1-3.5L12,6z M10,10H8v2H7v-2H5V9h2V7h1v2h2V10z\"/>"},"bank":{"v":"0 0 15 15","p":"<path d=\"M1,3C0.446,3,0,3.446,0,4v7c0,0.554,0.446,1,1,1h13c0.554,0,1-0.446,1-1V4c0-0.554-0.446-1-1-1H1z M1,4h1.5&#xA;&#x9;C2.7761,4,3,4.2239,3,4.5S2.7761,5,2.5,5S2,4.7761,2,4.5L1.5,5C1.7761,5,2,5.2239,2,5.5S1.7761,6,1.5,6S1,5.7761,1,5.5V4z M7.5,4&#xA;&#x9;C8.8807,4,10,5.567,10,7.5l0,0C10,9.433,8.8807,11,7.5,11S5,9.433,5,7.5S6.1193,4,7.5,4z M12.5,4H14v1.5C14,5.7761,13.7761,6,13.5,6&#xA;&#x9;S13,5.7761,13,5.5S13.2239,5,13.5,5L13,4.5C13,4.7761,12.7761,5,12.5,5S12,4.7761,12,4.5S12.2239,4,12.5,4z M7.5,5.5&#xA;&#x9;c-0.323,0-0.5336,0.1088-0.6816,0.25h1.3633C8.0336,5.6088,7.823,5.5,7.5,5.5z M6.625,6C6.5795,6.091,6.5633,6.1711,6.5449,6.25&#xA;&#x9;h1.9102C8.4367,6.1711,8.4205,6.091,8.375,6H6.625z M6.5,6.5v0.25h2V6.5H6.5z M6.5,7v0.25h2V7H6.5z M6.5,7.5v0.25h2V7.5H6.5z M6.5,8&#xA;&#x9;L6.25,8.25h2L8.5,8H6.5z M6,8.5c0,0,0.0353,0.1024,0.1016,0.25H8.375L8,8.5H6z M1.5,9C1.7761,9,2,9.2239,2,9.5S1.7761,10,1.5,10&#xA;&#x9;L2,10.5C2,10.2239,2.2239,10,2.5,10S3,10.2239,3,10.5S2.7761,11,2.5,11H1V9.5C1,9.2239,1.2239,9,1.5,9z M6.2383,9&#xA;&#x9;C6.2842,9.0856,6.3144,9.159,6.375,9.25h2.2676C8.7092,9.1121,8.75,9,8.75,9H6.2383z M13.5,9C13.7761,9,14,9.2239,14,9.5V11h-1.5&#xA;&#x9;c-0.2761,0-0.5-0.2239-0.5-0.5s0.2239-0.5,0.5-0.5s0.5,0.2239,0.5,0.5l0.5-0.5C13.2239,10,13,9.7761,13,9.5S13.2239,9,13.5,9z&#xA;&#x9; M6.5664,9.5c0.0786,0.0912,0.1647,0.1763,0.2598,0.25h1.4199C8.3462,9.6727,8.4338,9.5883,8.5,9.5H6.5664z\"/>"},"hotel":{"v":"0 0 15 15","p":"<path d=\"M0.5,2.5C0.2,2.5,0,2.7,0,3v7.5v2C0,12.8,0.2,13,0.5,13S1,12.8,1,12.5V11h13v1.5&#xA;&#x9;c0,0.3,0.2,0.5,0.5,0.5s0.5-0.2,0.5-0.5v-2c0-0.3-0.2-0.5-0.5-0.5H1V3C1,2.7,0.8,2.5,0.5,2.5z M3.5,3C2.7,3,2,3.7,2,4.5l0,0&#xA;&#x9;C2,5.3,2.7,6,3.5,6l0,0C4.3,6,5,5.3,5,4.5l0,0C5,3.7,4.3,3,3.5,3L3.5,3z M7,4C5.5,4,5.5,5.5,5.5,5.5V7h-3C2.2,7,2,7.2,2,7.5v1&#xA;&#x9;C2,8.8,2.2,9,2.5,9H6h9V6.5C15,4,12.5,4,12.5,4H7z\"/>"},"car_wash":{"v":"0 0 50 50","p":"<path d=\"M43 6v-4h-36v4h-7v43h4v-39h3v4h36v-4h3v39h4v-43zm-0.95 23l-6.52 -11.12c-0.26 -0.48 -0.91 -0.87 -1.45 -0.87h-18.16c-0.54 0 -1.19 0.39 -1.44 0.88l-6.52 11.13c-1.07 0 -1.95 0.9 -1.95 2v10c0 1.1 0.88 2 1.95 2h2.05v3c0 1.65 1.21 3 2.82 3h0.98c1.61 0 3.21 -1.35 3.21 -3v-3h16v3c0 1.65 1.6 3 3.21 3h0.98c1.61 0 2.82 -1.35 2.82 -3v-3h2.05c1.07 0 1.95 -0.9 1.95 -2v-10c0 -1.1 -0.88 -2 -1.95 -2zm-30.69 8c-1.34 0 -2.44 -1.12 -2.44 -2.5s1.09 -2.5 2.44 -2.5c1.35 0 2.44 1.12 2.44 2.5s-1.09 2.5 -2.44 2.5zm1.46 -8l4.44 -8.11c0.24 -0.49 0.88 -0.89 1.41 -0.89h12.67c0.54 0 1.17 0.4 1.41 0.89l4.44 8.11h-24.36zm25.82 8c-1.34 0 -2.44 -1.12 -2.44 -2.5s1.09 -2.5 2.44 -2.5c1.35 0 2.44 1.12 2.44 2.5s-1.09 2.5 -2.44 2.5z\"/>"},"laundromat":{"v":"0 0 15 15","p":"<path d=\"M8,1L6,3H3c0,0-1,0-1,1v9c0,1,1,1,1,1h9c0,0,1,0,1-1V2c0-1-1-1-1-1&#xA;&#x9;S8,1,8,1z M8.5,2h2C10.777,2,11,2.223,11,2.5S10.777,3,10.5,3h-2C8.223,3,8,2.777,8,2.5S8.223,2,8.5,2z M7.5,6&#xA;&#x9;c1.6569,0,3,1.3431,3,3s-1.3431,3-3,3s-3-1.3431-3-3S5.8431,6,7.5,6z\"/>"},"restaurant":{"v":"0 0 15 15","p":"<path d=\"M3.5,0l-1,5.5c-0.1464,0.805,1.7815,1.181,1.75,2L4,14c-0.0384,0.9993,1,1,1,1s1.0384-0.0007,1-1L5.75,7.5&#xA;&#x9;c-0.0314-0.8176,1.7334-1.1808,1.75-2L6.5,0H6l0.25,4L5.5,4.5L5.25,0h-0.5L4.5,4.5L3.75,4L4,0H3.5z M12,0&#xA;&#x9;c-0.7364,0-1.9642,0.6549-2.4551,1.6367C9.1358,2.3731,9,4.0182,9,5v2.5c0,0.8182,1.0909,1,1.5,1L10,14c-0.0905,0.9959,1,1,1,1&#xA;&#x9;s1,0,1-1V0z\"/>"},"retail":{"v":"0 0 15 15","p":"<path d=\"m13.33 5h-1.83l-.39-2.33c-.1601-.7182-.7017-1.2905-1.41-1.49-.3493-.1124-.7131-.173-1.08-.18h-2.24c-.3669.007-.7307.0676-1.08.18-.7083.1995-1.2499.7718-1.41 1.49l-.39 2.33h-1.83c-.2761-.0017-.5013.2208-.503.497-.0003.0519.0074.1035.023.153l1.88 6.3c.1964.6246.7753 1.0496 1.43 1.05h6c.651-.0047 1.2247-.4289 1.42-1.05l1.88-6.3c.0829-.2634-.0635-.5441-.3269-.627-.0463-.0146-.0945-.0223-.1431-.023zm-8.81 0 .36-2.17c.0807-.3625.3736-.6395.74-.7.2463-.0776.5019-.1213.76-.13h2.24c.2614.0078.5205.0515.77.13.3664.0605.6593.3375.74.7l.35 2.17h-6z\"/>"},"warehouse":{"v":"0 0 15 15","p":"<path d=\"M13.5,5c-0.0762,0.0003-0.1514-0.0168-0.22-0.05L7.5,2L1.72,4.93C1.4632,5.0515,1.1565,4.9418,1.035,4.685&#xA;&#x9;S1.0232,4.1215,1.28,4L7.5,0.92L13.72,4c0.2761,0.0608,0.4508,0.3339,0.39,0.61C14.0492,4.8861,13.7761,5.0608,13.5,5z M5,10H2v3h3&#xA;&#x9;V10z M9,10H6v3h3V10z M13,10h-3v3h3V10z M11,6H8v3h3V6z M7,6H4v3h3V6z\"/>"},"memorial":{"v":"0 0 15 15","p":"<path d=\"M11.46,12h-0.68L12,3.55c0.0175-0.2867-0.2008-0.5332-0.4874-0.5507C11.4884,2.9979,11.4641,2.9981,11.44,3h-1.18&#xA;&#x9;c0-0.92-1.23-2-2.75-2S4.77,2.08,4.77,3H3.54C3.253,2.9885,3.0111,3.2117,2.9995,3.4987C2.9988,3.5158,2.999,3.5329,3,3.55L4.2,12&#xA;&#x9;H3.55C3.2609,11.9886,3.0162,12.2112,3,12.5V14h9v-1.51C11.9839,12.2067,11.7435,11.9886,11.46,12z M4.5,5h6v1h-6V5z\"/>"},"airstrip":{"v":"0 0 15 15","p":"<path d=\"M6.8182,0.6818H4.7727&#xA;&#x9;C4.0909,0.6818,4.0909,0,4.7727,0h5.4545c0.6818,0,0.6818,0.6818,0,0.6818H8.1818c0,0,0.8182,0.5909,0.8182,1.9545V4h6v2L9,8l-0.5,5&#xA;&#x9;l2.5,1.3182V15H4v-0.6818L6.5,13L6,8L0,6V4h6V2.6364C6,1.2727,6.8182,0.6818,6.8182,0.6818z\"/>"},"airport":{"v":"0 0 15 15","p":"<path d=\"M15,6.8182L15,8.5l-6.5-1&#xA;&#x9;l-0.3182,4.7727L11,14v1l-3.5-0.6818L4,15v-1l2.8182-1.7273L6.5,7.5L0,8.5V6.8182L6.5,4.5v-3c0,0,0-1.5,1-1.5s1,1.5,1,1.5v2.8182&#xA;&#x9;L15,6.8182z\"/>"},"govt_building":{"v":"0 0 15 15","p":"<path d=\"M13,4H9l0-3L7.5,0L6,1v3H2L1,5v1h13V5L13,4z M7.5,1.5c0.4,0,0.7,0.3,0.7,0.8S7.9,3,7.5,3S6.7,2.7,6.7,2.2&#xA;&#x9;C6.7,1.8,7.1,1.5,7.5,1.5z M13,7H2v4l-1,1.5V14h13v-1.5L13,11V7z M5,12.5H4V8h1V12.5z M8,12.5H7V8h1V12.5z M11,12.5h-1V8h1V12.5z\"/>"},"mall":{"v":"0 0 50 50","p":"<path d=\"M25.58 8.94c2.3 0.17 4.31 -1.47 4.49 -3.65c0.18 -2.19 -1.53 -4.11 -3.83 -4.28c-2.3 -0.17 -4.31 1.46 -4.49 3.65c-0.18 2.19 1.54 4.1 3.83 4.27zm17.21 32.06l-1.39 -12h-2.25c0.02 -1 0.02 -1.11 -0.05 -1.72c-0.07 -0.62 -0.26 -1.07 -0.58 -1.22c0.26 -0.28 0.44 -0.64 0.47 -1.04c0.05 -0.63 -0.24 -1.22 -0.74 -1.57l-5.73 -3.77l-4.22 -7.95c-0.7 -1.04 -1.88 -1.88 -3.31 -2c-1.1 -0.08 -2.11 0.29 -2.92 0.83l-8.37 6.48c-0.28 0.22 -0.48 0.51 -0.58 0.87l-1.95 7.85l-0.15 0.23v0h-0.02c-0.33 0 -0.62 0.31 -0.74 0.73c-0.11 0.41 -0.24 0.94 -0.24 1.37v0.9h-2.17l-1.39 12h5.61l-2.46 3.94c-0.16 0.31 -0.35 0.74 -0.38 1.15c-0.12 1.49 1.04 2.79 2.59 2.9c1.11 0.07 2.07 -0.46 2.65 -1.32l4.15 -6.67h0.54l-0.08 -0.74l1.15 -1.85c0.13 -0.25 0.52 -0.85 0.57 -1.14l1.41 -6.11l6 6.27l1.88 9.43c0.3 1.12 1.26 2.04 2.54 2.13c1.56 0.12 2.92 -0.98 3.04 -2.47l-0.02 -0.55l-0.98 -4.97h8.13zm-31.83 -13.01c0.06 -0.47 0.23 -0.74 0.55 -0.74l0.12 0c0.32 0.38 0.78 0.64 1.32 0.69c0.62 0.05 1.18 -0.22 1.55 -0.63c0.08 0.07 0.15 0.18 0.2 0.33c0.08 0.29 0.13 0.62 0.13 0.89c0 0.16 -0.01 0.49 -0.02 0.49h-3.88c-0.01 0 -0.01 -0.64 0.03 -1.01zm5.73 1.01h-1.18c0.03 -1 0.02 -1.11 -0.05 -1.72c-0.06 -0.52 -0.2 -0.92 -0.44 -1.13l1.48 -6.44l2.92 -2.26l-2.73 11.55zm21.76 0h-3.88c-0.02 0 -0.01 -0.64 0.03 -1.01c0.05 -0.47 0.23 -0.74 0.55 -0.74c0.45 0 0.86 -0.01 1.22 -0.02c0.36 -0.01 0.86 -0.03 1.48 -0.03c0.24 0 0.4 0.14 0.49 0.43c0.09 0.29 0.13 0.62 0.13 0.89l-0.02 0.49zm-12.55 -2.28l1.88 -7.94l1.58 2.98c0.13 0.21 0.27 0.37 0.47 0.53l5.65 3.7h-0.85c-0.33 0 -0.45 0.31 -0.56 0.73c-0.11 0.41 -0.06 0.94 -0.06 1.37v0.9h-2.53l-0.41 3.53l-5.16 -5.81z\"/>"},"mailbox":{"v":"0 0 15 15","p":"<path d=\"M9 11L9 14L7 14L7 11L1 11L1 7C1 5.34 2.34 4 4 4L7 4L7 1L10 1L10 3L8 3L8 4L11 4C12.66 4 14 5.34 14 7L14 11L9 11ZM4 5C2.9 5 2 5.9 2 7L2 10L6 10L6 7C6 5.9 5.1 5 4 5ZM3.5 6L4.5 6C4.78 6 5 6.22 5 6.5C5 6.78 4.78 7 4.5 7L3.5 7C3.22 7 3 6.78 3 6.5C3 6.22 3.22 6 3.5 6Z\"/>"},"casino":{"v":"0 0 15 15","p":"<path d=\"M8.5,10c0.4561,0.6072,1.1821,1,2,1c1.3807,0,2.5-1.1193,2.5-2.5c0-0.5642-0.1938-1.0789-0.509-1.4973L12.5,7l-5-6l-5,6&#xA;&#x9;l0.009,0.0027C2.1938,7.4211,2,7.9358,2,8.5C2,9.8807,3.1193,11,4.5,11c0.8179,0,1.5439-0.3928,2-1&#xA;&#x9;C6.5997,9.8672,6.7902,9.6135,7,9.3337V11.5C7,13,4.5,13,4.5,13C4.2239,13,4,13.2238,4,13.5C4,13.7761,4.2239,14,4.5,14H7h1h2.5&#xA;&#x9;c0.2761,0,0.5-0.2239,0.5-0.5c0-0.2762-0.2239-0.5-0.5-0.5c0,0-2.5,0-2.5-1.5V9.3337C8.2098,9.6135,8.4003,9.8672,8.5,10z\"/>"},"parking":{"v":"0 0 15 15","p":"<path d=\"M10.5,10.14c-0.6637,0.4788-1.4732,0.7121-2.29,0.66h-1.9V14h-1.9V5h3.92&#xA;&#x9;c0.7801-0.0414,1.5484,0.2041,2.16,0.69c0.5779,0.5595,0.875,1.3483,0.81,2.15C11.4042,8.6892,11.1088,9.5388,10.5,10.14z M9,6.9&#xA;&#x9;C8.711,6.6881,8.3579,6.5822,8,6.6H6.31v2.65H8c0.3612,0.0191,0.717-0.0947,1-0.32c0.2559-0.2675,0.3867-0.6308,0.36-1&#xA;&#x9;C9.4072,7.5493,9.274,7.1684,9,6.9z M14.41,4.21c0.114-0.2486,0.007-0.5427-0.24-0.66L7.5,0.45l-6.71,3.1&#xA;&#x9;C0.5387,3.666,0.429,3.9637,0.545,4.215C0.661,4.4663,0.9587,4.576,1.21,4.46l0,0L7.5,1.55l6.29,2.9&#xA;&#x9;c0.2486,0.114,0.5427,0.007,0.66-0.24H14.41z\"/>"},"diner":{"v":"0 0 15 15","p":"<path fill-rule=\"evenodd\" d=\"M7.5 15C3.5 15 2 12 2 9C2 5 4.5 0 7.5 0C10.5 0 13 5 13 9C13 12 11.5 15 7.5 15zM7.5 6.2a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6z\"/>"},"general":{"v":"0 0 15 15","p":"<path d=\"M7.5 1C5.42312 1 3 2.2883 3 5.56759C3 7.79276 6.46156 12.7117 7.5 14C8.42309 12.7117 12 7.90993 12 5.56759C12 2.2883 9.57688 1 7.5 1Z\"/>"},"odometer":{"v":"0 0 15 15","p":"<path d=\"M7.5 0C11.75 0 15 3.5 15 7.5C15 11.5 11.75 15 7.5 15C3.25 15 0 11.75 0 7.5C0 3.25 3.25 0 7.5 0zM6 9.25C6 9.25 3.13 11.25 3.13 11.25C3.13 11.25 4.5 13.25 7.5 13.25C10.5 13.25 11.88 11.25 11.88 11.25C11.88 11.25 9 9.25 9 9.25C8.06 9.88 6.94 9.88 6 9.25zM6.5 1.75C4 2.25 1.75 4.75 1.75 7.5C1.75 9.06 2.19 9.69 2.19 9.69C2.19 9.69 5.25 7.75 5.25 7.75C5.25 7.75 5 6.25 6.5 5.5C6.5 5.5 6.5 1.75 6.5 1.75zM8.5 1.75C8.5 1.75 8.5 5.5 8.5 5.5C10 6.25 9.75 7.75 9.75 7.75C9.75 7.75 12.81 9.69 12.81 9.69C12.81 9.69 13.25 9 13.25 7.5C13.25 4.75 11 2.25 8.5 1.75z\"/>"},"debrief":{"v":"0 0 15 15","p":"<path d=\"M0.5 2L14.5 2C14.78 2 15 2.22 15 2.5L15 12.5C15 12.78 14.78 13 14.5 13L0.5 13C0.22 13 0 12.78 0 12.5L0 2.5C0 2.22 0.22 2 0.5 2ZM3.3 2.75L1.75 8.55L6.1 9.71L7.65 3.91L3.3 2.75ZM7.5 6.41L9.05 12.21L10.02 11.95L9.63 10.5L10.6 10.24L10.98 11.69L13.4 11.05L12.23 6.69L11.85 5.25L7.5 6.41Z\"/>"},"none":{"v":"0 0 15 15","p":"<path d=\"M7.5 12.3C4.84898 12.3 2.7 10.151 2.7 7.5C2.7 4.84898 4.84898 2.7 7.5 2.7C10.151 2.7 12.3 4.84898 12.3 7.5C12.3 10.151 10.151 12.3 7.5 12.3ZM7.5 14C11.0899 14 14 11.0899 14 7.5C14 3.9101 11.0899 1 7.5 1C3.9101 1 1 3.9101 1 7.5C1 11.0899 3.9101 14 7.5 14Z\"/>"},"printer_site":{"v":"0 0 15 15","p":"<path d=\"M4 1h7v3H4zM2 5h11a1 1 0 0 1 1 1v5h-2.5V9h-8v2H1V6a1 1 0 0 1 1-1zm2.5 5h6v4h-6z\"/>"},"receipt":{"v":"0 0 15 15","p":"<path fill-rule=\"evenodd\" d=\"M3 1h9v13l-1.5-1-1.5 1-1.5-1L6 14l-1.5-1L3 14zm2 3v1h5V4zm0 2.5v1h5v-1zM5 9v1h3V9z\"/>"}};
+// Delivery Twin dropoff places and the work-only categories it keeps out of the pickers.
+const DT_HIDDEN_CATS = ['amazon_locker', 'warehouse', 'printer_site', 'memorial', 'airstrip'];
+const DT_FULL_Q = ['residential', 'apartment', 'highrise', 'gated', 'hotel'];
+Object.assign(CATEGORIES, {
+  residential: { label: 'House',            icon: '\u{1F3E0}', color: '#2e7d32' },
+  apartment:   { label: 'Apartment complex', icon: '\u{1F3D8}', color: '#6a1b9a' },
+  highrise:    { label: 'High-rise apartments', icon: '\u{1F3E2}', color: '#283593' },
+  gated:       { label: 'Gated community',   icon: '\u{1F6A7}', color: '#bf360c' }
+});
+Object.assign(ICON_ART, {"residential": {"v": "0 0 15 15", "p": "<path d=\"M2,13.7478c0,0.13807,0.11193,0.25,0.25,0.25h3.749v-3h3v3h3.749c0.13807,0,0.25-0.11193,0.25-0.25V7.9987H2  C2,7.9987,2,13.7478,2,13.7478z M13.93,6.5778l-0.9319-0.8189V2c0-0.55228-0.44771-1-1-1s-1,0.44772-1,1v2L7.6808,1.09  C7.5863,0.9897,7.42846,0.98478,7.3279,1.079L7.3169,1.09L1.0678,6.553C0.9734,6.65376,0.97856,6.81197,1.07932,6.90637  C1.12478,6.94896,1.18451,6.97304,1.2468,6.9739L3,6.9989h10.7468c0.13807,0.00046,0.25037-0.1111,0.25083-0.24917  C13.99784,6.68592,13.97365,6.62445,13.93,6.5779V6.5778z\"/>"}, "apartment": {"v": "0 0 15 15", "p": "<path d=\"m11.8 12.5v-2.5c.7-.1 1.2-.7 1.2-1.5s-.7-1.5-1.5-1.5-1.5.7-1.5 1.5c0 .7.5 1.4 1.2 1.5v2.5h-4.2v-11.5h-5v11.5h-1v.5h13v-.5zm-5.8-2.5h-3v-1h3zm0-2h-3v-1h3zm0-2h-3v-1h3zm0-2h-3v-1h3z\"/>"}, "highrise": {"v": "0 0 15 15", "p": "<path d=\"M11,13.5v-9C11,4.2,10.8,4,10.5,4H9V1L5,2.1v11.4H2V14h11v-0.5H11z M7,13.5V3h1v10.5H7z\"/>"}, "gated": {"v": "0 0 15 15", "p": "<path d=\"M1 4a2 2 0 1 1 4 0v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4Zm3 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm4.5 2L7 3H6v3h2.5ZM10 6h1.5L10 3H8.5L10 6Zm3.25 0H13l-1.5-3h1.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-.75.75Z\"/>"}});
 function iconSvg(key, size, color) {
   const a = ICON_ART[key] || ICON_ART.general;
   return '<svg class="ft-ico" viewBox="' + a.v + '" width="' + size + '" height="' + size + '" fill="' + (color || 'currentColor') + '" aria-hidden="true">' + a.p + '</svg>';
@@ -1025,7 +1035,8 @@ const SIGN_SHAPES = {
   airport: 'guide', airstrip: 'guide',
   memorial: 'yield',
   grocery: 'circle', retail: 'circle', mall: 'circle', bank: 'circle', casino: 'circle', mailbox: 'square', parking: 'square', diner: 'octagon',
-  general: 'shield', none: 'shield', receipt: 'tag', odometer: 'guide'
+  general: 'shield', none: 'shield', receipt: 'tag', odometer: 'guide',
+  residential: 'square', apartment: 'square', highrise: 'square', gated: 'pentagon'
 };
 
 function signHtml(key, iconChar, size) {
@@ -1050,7 +1061,7 @@ function signHtml(key, iconChar, size) {
     '<span style="display:flex;transform:translateY(' + Math.round(shift * k) + 'px);">' + iconSvg(CATEGORIES[key] ? key : 'general', g, '#ffffff') + '</span></div>';
 }
 
-const ICON_CHOICES = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && k !== 'amazon_locker' && k !== 'receipt').sort((a, b) => CATEGORIES[a].label.localeCompare(CATEGORIES[b].label));
+const ICON_CHOICES = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && DT_HIDDEN_CATS.indexOf(k) === -1 && k !== 'receipt').sort((a, b) => CATEGORIES[a].label.localeCompare(CATEGORIES[b].label));
 const FALLBACK_ICON = CATEGORIES.general.icon;
 let selectedIcon = FALLBACK_ICON;
 const MIN_SAVE_INTERVAL_MS = 30000;
@@ -1755,7 +1766,7 @@ function territorySpan(list) {
 }
 
 function computeTrophies(stats, list) {
-  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && k !== 'amazon_locker');
+  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && DT_HIDDEN_CATS.indexOf(k) === -1);
   const distinctCats = catKeys.filter(k => stats.categoryCounts[k]).length;
   const span = territorySpan(list);
   return [
@@ -1950,7 +1961,7 @@ function buildSearchPage() {
   const page = document.getElementById('searchPage');
   if (page.getAttribute('data-built')) return;
   let cats = '<option value="">All types</option>';
-  Object.keys(CATEGORIES).filter(k => k !== 'amazon_locker').forEach(k => {
+  Object.keys(CATEGORIES).filter(k => DT_HIDDEN_CATS.indexOf(k) === -1).forEach(k => {
     cats += '<option value="' + k + '">' + CATEGORIES[k].label + '</option>';
   });
   let html = '<div class="sq-head"><div class="title">[ SEARCH ]</div><button class="secondary" id="sqClose">Close</button></div>';
@@ -2097,6 +2108,9 @@ function detectCategory(geo) {
   if (has('police') || has('fire_station') || has('library') || has('courthouse') ||
       has('townhall') || has('post_office') || has('government') || has('public_building') ||
       has('social_facility') || has('prison') || has('ranger_station')) return 'govt_building';
+  if (has('apartments') || has('apartment') || name.includes('apartment') || name.includes(' apts')) return (Number(addr['building:levels'] || 0) >= 5 || name.includes('tower')) ? 'highrise' : 'apartment';
+  if (name.includes('guard gate') || name.includes('gated') || (has('gate') && name.includes('community'))) return 'gated';
+  if (has('house') || has('detached') || has('semidetached_house') || has('terrace') || has('residential')) return 'residential';
   if (shop || has('department_store') || has('marketplace')) return 'retail';
   return null;
 }
@@ -2294,19 +2308,6 @@ function categoryQuestions(category) {
       bq('parking', 'Parking congestion right now', ['Empty', 'Moderate', 'Full']),
       bq('shade', 'Is the ATM shaded or exposed to direct sun', ['Shaded', 'Exposed'])
     ],
-    hotel: [
-      sq('propertyType', 'Property type', ['Motel', 'Budget hotel', 'Mid range', 'Upscale']),
-      sq('floors', 'How many floors', ['1', '2', '3-4', '5 or more']),
-      bq('exteriorEntry', 'Room entry style', ['Exterior doors', 'Interior corridors']),
-      sq('posBrand', 'Front desk system brand, if visible', ['Opera', 'Choice Advantage', 'Other', 'Unknown']),
-      bq('keyType', 'Room key type', ['Magstripe card', 'RFID card', 'Physical key']),
-      sq('cameraCount', 'Visible camera count in the lobby', ['0', '1-2', '3-4', '5 or more']),
-      bq('wifi', 'Is guest wifi available', ['Yes', 'No']),
-      bq('breakfast', 'Is breakfast service offered', ['Yes', 'No']),
-      bq('deskStaffed', 'Is the front desk staffed right now', ['Yes', 'No']),
-      bq('parking', 'Parking congestion right now', ['Empty', 'Moderate', 'Full']),
-      bq('lighting', 'Exterior lighting at night', ['Bright', 'Moderate', 'Dim'])
-    ],
     car_wash: [
       bq('washType', 'Wash type', ['Automatic tunnel', 'In bay automatic', 'Self serve bays', 'Hand wash']),
       sq('bayCount', 'How many bays or lanes', ['1', '2-3', '4-5', '6 or more']),
@@ -2450,6 +2451,56 @@ function categoryQuestions(category) {
       bq('accessibility', 'Is step free access available', ['Yes', 'No']),
       tq('hoursPosted', 'Posted hours, if visible')
     ],
+    residential: [
+      sq('dropSpot', 'Where do orders get left', ['Front door', 'Side or back door', 'Garage', 'Porch box', 'Hand to customer']),
+      bq('numberVisible', 'Is the house number easy to see from the street', ['Yes', 'No']),
+      bq('numberLit', 'Is the house number lit at night', ['Yes', 'No']),
+      bq('fence', 'Is there a fence or yard gate to get through', ['Yes', 'No']),
+      bq('dog', 'Is there a dog loose or behind the gate', ['Yes', 'No']),
+      bq('parking', 'Where do you park', ['Driveway', 'Street', 'Alley']),
+      bq('porchLight', 'Is the porch lit at night', ['Yes', 'No']),
+      tq('dropNote', 'Anything the next driver should know')
+    ],
+    apartment: [
+      sq('gateAccess', 'How do you get through the gate', ['No gate', 'Call box', 'Gate code', 'Guard', 'Resident lets you in']),
+      bq('mapPosted', 'Is a building map posted at the entrance', ['Yes', 'No']),
+      bq('buildingNumbers', 'Are building numbers easy to see', ['Yes', 'No']),
+      sq('dropSpot', 'Where do orders get left', ['Unit door', 'Leasing office', 'Package room', 'Lockers', 'Meet at the gate']),
+      sq('stairsLift', 'How do you reach upper units', ['Ground floor only', 'Stairs', 'Elevator', 'Both']),
+      sq('parking', 'Where do you park', ['Visitor spots', 'Fire lane', 'Street', 'No parking']),
+      bq('dog', 'Are loose dogs common here', ['Yes', 'No']),
+      tq('gateNote', 'Gate code or call box tips')
+    ],
+    highrise: [
+      sq('floors', 'How many floors', ['5-10', '11-25', '26-50', 'Over 50']),
+      sq('dropSpot', 'Where do orders get left', ['Front desk', 'Concierge', 'Package room', 'Up to the unit', 'Customer comes down']),
+      bq('upstairs', 'Are drivers allowed up to the unit', ['Yes', 'No', 'Escorted only']),
+      bq('fob', 'Does the elevator need a key fob', ['Yes', 'No']),
+      bq('signIn', 'Do drivers sign in or show ID at the desk', ['Yes', 'No']),
+      sq('parking', 'Where do you park', ['Loading zone', 'Valet', 'Garage', 'Street', 'No parking']),
+      sq('extraTime', 'Extra time it takes past the door', ['Under 5 min', '5-10 min', '10-20 min', 'Over 20 min']),
+      tq('lobbyNote', 'Lobby or elevator tips')
+    ],
+    gated: [
+      sq('gateType', 'What kind of gate', ['Guard', 'Code keypad', 'Call box', 'Remote only']),
+      bq('guardId', 'Does the guard ask for ID or the resident name', ['Yes', 'No']),
+      bq('visitorLane', 'Is there a separate visitor lane', ['Yes', 'No']),
+      sq('gateWait', 'How long does the gate take', ['Under 1 min', '1-3 min', '3-5 min', 'Over 5 min']),
+      bq('mapPosted', 'Is a map posted at the gate', ['Yes', 'No']),
+      bq('numbersVisible', 'Are house numbers easy to see inside', ['Yes', 'No']),
+      tq('gateNote', 'Gate code or guard tips')
+    ],
+    hotel: [
+      sq('propertyType', 'Property type', ['Motel', 'Budget hotel', 'Mid range', 'Upscale', 'Casino resort']),
+      sq('floors', 'How many floors', ['1', '2', '3-4', '5-20', 'Over 20']),
+      sq('dropSpot', 'Where do orders get left', ['Front desk', 'Bell desk', 'Up to the room', 'Guest comes down', 'Room door outside']),
+      bq('upstairs', 'Are drivers allowed up to rooms', ['Yes', 'No', 'Escorted only']),
+      bq('exteriorEntry', 'Room entry style', ['Exterior doors', 'Interior corridors']),
+      bq('fob', 'Does the elevator need a room key', ['Yes', 'No']),
+      sq('parking', 'Where do you park', ['Front entrance', 'Valet', 'Garage', 'Lot', 'No parking']),
+      sq('extraTime', 'Extra time it takes past the door', ['Under 5 min', '5-10 min', '10-20 min', 'Over 20 min']),
+      tq('dropNote', 'Anything the next driver should know')
+    ],
     mall: [
       sq('anchorCount', 'How many anchor stores', ['0', '1', '2', '3', '4 or more']),
       sq('occupancy', 'Approximate storefront occupancy', ['Under 25 percent', '25-50 percent', '50-75 percent', 'Over 75 percent']),
@@ -2470,7 +2521,7 @@ function categoryQuestions(category) {
   };
   const pool = pools[category];
   if (!pool) return fullQuestions();
-  if (category === 'memorial') return pool;
+  if (category === 'memorial' || DT_FULL_Q.indexOf(category) !== -1) return pool;
   return pickSubset(pool, 8);
 }
 
@@ -4062,21 +4113,21 @@ function twinHand() { try { return JSON.parse(localStorage.getItem(TWIN_HAND_KEY
 function twinHandSave(h) { try { localStorage.setItem(TWIN_HAND_KEY, JSON.stringify(h)); } catch (e) {} }
 function twinPick() {
   try { const p = JSON.parse(localStorage.getItem(TWIN_PICK_KEY) || 'null'); if (p) return p; } catch (e) {}
-  return { teal: true, violet: true, glaucous: true };
+  return { teal: true, violet: true, glaucous: false };
 }
 function twinPickSave(p) { try { localStorage.setItem(TWIN_PICK_KEY, JSON.stringify(p)); } catch (e) {} }
 function twinBoxes(withTeal) {
   const p = twinPick();
   const box = (id, on, label) => '<label class="twin-pick"><input type="checkbox" id="' + id + '"' + (on ? ' checked' : '') + '> ' + label + '</label>';
   return '<div class="question">Sign in to</div><div class="twin-picks">' +
-    (withTeal ? box('pickTeal', p.teal !== false, 'Delivery Twin Teal, the map') : '') +
-    box('pickViolet', p.violet !== false, 'Delivery Twin Violet, the inventory') +
-    box('pickGlaucous', p.glaucous !== false, 'Delivery Twin Glaucous, the roads') + '</div>';
+    (withTeal ? box('pickTeal', p.teal !== false, 'Delivery Twin, the map') : '') +
+    box('pickViolet', p.violet !== false, 'Delivery Twin Inventory') +
+    '</div>';
 }
 function twinReadBoxes(withTeal) {
   const on = id => { const el = document.getElementById(id); return Boolean(el && el.checked); };
   const old = twinPick();
-  const p = { teal: withTeal ? on('pickTeal') : old.teal !== false, violet: on('pickViolet'), glaucous: on('pickGlaucous') };
+  const p = { teal: withTeal ? on('pickTeal') : old.teal !== false, violet: on('pickViolet'), glaucous: false };
   twinPickSave(p);
   return p;
 }
@@ -4096,7 +4147,7 @@ async function twinSignOthers(email, pass, pick) {
     const v = await twinLogin(SUPABASE_URL, SUPABASE_ANON, email, pass);
     if (v) { h.violet = v; delete h.violetOut; } else failed.push('Violet');
   }
-  if (pick.glaucous) {
+  if (false) {
     const g = await twinLogin(CQ_URL, CQ_ANON, email, pass);
     if (g) { h.glaucous = g; delete h.glaucousOut; } else failed.push('Glaucous');
   }
@@ -5430,7 +5481,7 @@ function profileHtml() {
   html += '<div class="meta-line">' + span + ' miles of ground covered</div>';
 
   html += '<div class="question">Categories</div>';
-  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && k !== 'amazon_locker');
+  const catKeys = Object.keys(CATEGORIES).filter(k => k !== 'none' && k !== 'odometer' && k !== 'debrief' && DT_HIDDEN_CATS.indexOf(k) === -1);
   catKeys.forEach(k => {
     const n = stats.categoryCounts[k] || 0;
     const m = CATEGORIES[k];
@@ -5454,57 +5505,23 @@ function showInfo() {
   const panel = document.getElementById('panel');
   let html = '<h2>About</h2>';
   html += '<div class="question">Delivery Twin</div>';
-  html += '<div>A notebook on a map. Stops, receipts and odometer readings become signs you can open, edit, search and add up.</div>';
-  html += '<div class="question">Bottom buttons</div>';
-  html += '<div>Log saves where you are and opens a short form for that kind of place. The kind of place list has a search box at the top, and includes mailbox, casino, parking structure and diner. Receipt photographs a receipt and reads the store, totals, date, address and items. Miles saves an odometer reading, and appears when Odometer is switched on in the menu. Go gives you a route, explained under Go and routes.</div>';
-  html += '<div class="question">Go and routes</div>';
-  html += '<div>Tap Go, then say or type where you are going. Your own places come first, named lockers and spots you drove to or picked before, ranked by how often you arrive, pick or log there, so the list learns your routine. If nothing you saved matches, the Delivery Twin service reads what you said and finds the address near you. Routes come from free open map data with no ads and no traffic feed. Drift off the line for three position checks in a row and a new route is made from where you are. The Avoid airport switch on the Go screen keeps routes out of the Las Vegas airport terminal loops, runways and tunnel, where routes used to send you onto roads that do not exist. The route has no sound at all. While driving, the next turn shows near the bottom of the map with three small round buttons beside it: the map button opens the route in your phone maps app, the target button puts you back in the middle and follows you again, and the X ends the route.</div>';
-  html += '<div class="question">Night look</div>';
-  html += '<div>Night look is a dim slate version of the whole app, map included, that is easy on the eyes after dark while the text stays light and clear. It turns on by itself between sunset and sunrise where you are. The Night look button at the top of the menu steps through automatic, always on and always off, and the inventory tab follows it.</div>';
-  html += '<div class="question">Place signs</div>';
-  html += '<div>Every kind of place has its own drawn sign: a colored shape with a white picture, the same on every phone. The shape tells the group, such as octagons for food, squares for services and diamonds for work sites, and the picture tells the kind.</div>';
-  html += '<div class="question">Floating window</div>';
-  html += '<div>In the phone app, leaving Delivery Twin while a route is running shrinks it into a small floating window over your other apps. Only the map and the next turn show, centered on you, and the page keeps running so the route and your position stay live. Open Delivery Twin again and it goes back to full size.</div>';
-  html += '<div class="question">Lockers</div>';
-  html += '<div>Every stop logged as a parcel locker becomes a locker, named from its notes when a name is in there, such as locker Lasso. Any entry can become one with Make locker. Lockers in the menu lists them all with a search box, and each locker has its own page with its name, address, every stop logged there, all its photos, Go here, and Add photo of this locker. Add lockers from open map data finds Amazon lockers in free open map data within about a hundred miles and adds the ones you do not have. The All lockers switch loads every locker anyone on Delivery Twin has mapped into your list, shares the name, spot and address of yours back, and shows every locker as a pin. It works even for a coworker on his own account. Only the locker itself is shared: never who added it, when, or your stops and visits.</div>';
-  html += '<div class="question">Locker site for Parcelsun</div>';
-  html += '<div>Each locker page has a Site for Parcelsun section: door count, module count, generation, placement, awning, whether the back sits against a wall, and which way the front faces. Aim phone measures the facing with the compass: stand a few steps out in front of the locker, point the back of the phone at its middle, and tap Capture. Steel throws a compass off, so stand back from the bank rather than pressing the phone against it. Add shade blocker measures a wall, building or tree that shades the locker: from in front of the locker, aim at its left edge, its right edge, then tilt up to its top edge, then name it and add its height and distance if you know them. Open in Parcelsun opens the heat model with this locker already set up, its blockers casting shade at the right hours. The site stays with the locker and syncs to your other phones, and it is never shared on the team list.</div>';
-  html += '<div class="question">Photos</div>';
-  html += '<div>An entry or a locker can hold as many photos as you like. Each photo goes straight up to your account in the cloud and waits on the phone only until it uploads, so every phone signed in sees them. Tap a photo square to see it full size. The first time in the phone app, Android asks for camera permission.</div>';
-  html += '<div class="question">Daily miles and CarData</div>';
-  html += '<div>Daily miles in the menu gives each workday a start, an end and business miles. The day starts at your day start point and ends at the last ticket, so the drive home is never business. Missing readings at a stop are filled in from your real readings before and after it. Leg check compares each drive, from the day start to a ticket and from ticket to ticket, with the road route between the two addresses, flags any leg where the odometer went well over the road route along with side stops logged on the way such as lunch, and Use road route miles sets business miles to the road route plus your extra miles. Each day has a For CarData box with Beginning, Ending and Business mileage laid out like the CarData form, and Copy for CarData copies them. Miles off the clock shows how far the truck went from the last ticket of one workday to the start of the next, which is the drive home and back plus anything personal, compared with your typical night, along with the GPS times you reached the first ticket and left the last one. The spreadsheet includes those off the clock miles too.</div>';
-  html += '<div class="question">Odometer entries</div>';
-  html += '<div>Edit on an odometer entry keeps it an odometer entry and lets you change the reading, the vehicle, and whether those miles were work or personal. Mileage splits your miles into work and personal from those choices.</div>';
-  html += '<div class="question">Traffic cameras</div>';
-  html += '<div>Cameras sit in teal bubbles with a count, so hundreds of them do not draw at once and the map stays smooth. Zoom in or tap a bubble to spread them out, and road names show under single cameras when zoomed in close.</div>';
-  html += '<div class="question">Field chat</div>';
-  html += '<div>Field Chat is a chat room for your team, run on the same backend as Cat Command Chat, so the same members, names and invites get you into both while the messages stay separate. Open Field Chat opens it. With Field Chat alerts on, a new message from someone else flashes the screen in rainbow colors for a moment, on the full map, the floating window and the companion screen alike, with no sound and no pop up.</div>';
-  html += '<div class="question">FT Companion screen</div>';
-  html += '<div>FT Companion is a small dashboard screen board, a Waveshare ESP32 C6 with its own GPS and motion sensor. In the phone app, switch FT Companion on and the phone links to it by Bluetooth, or by USB cable through an OTG adapter. Once linked it draws the streets around you and the route with each turn, its GPS takes over following the route, it flashes for Field Chat, and its road roughness readings are saved with where they were measured. The line under the switch says what the link is doing.</div>';
-  html += '<div class="question">Receipts</div>';
-  html += '<div>Fields the reader was unsure of are highlighted. The pin goes at your location or the receipt address, your choice. The entry is filed under the date printed on the receipt. Before saving, the app checks for a receipt you already saved with the same total plus the same printed date and time, or the same date and store, or with no date the same store nearby, and warns you. Spend lists any likely duplicates already saved.</div>';
-  html += '<div class="question">Map</div>';
-  html += '<div>Sign shapes show the kind of place, listed under Color key. Receipts show as price tags. Nearby signs merge into a numbered circle, tap to spread them out. The blue dot is you, checked about every five minutes in a browser and every five seconds in the phone app, and the target button checks right now.</div>';
-  html += '<div class="question">Entries</div>';
-  html += '<div>Tap a sign to open it. Edit changes anything, Delete is on the Edit screen, and the four arrows button moves the pin.</div>';
-  html += '<div class="question">Menu</div>';
-  html += '<div>Search, Day log, History, Spend and Mileage look back over your entries. Cameras shows Nevada highway cameras. Lockers holds the All lockers switch and the locker list. Quality and Heat map draw road roughness and how often you travel a road. Crashes, Construction and Crash history show road hazards, and Settings picks how far back and how wide an area. Switches stay the way you leave them.</div>';
-  html += '<div class="question">Road hazards</div>';
-  html += '<div>Crashes and construction come from the Nevada and Arizona road departments, saved every few minutes by the Delivery Twin server, so history builds from the day collection started. Crash history is fatal crashes from federal records, which run about a year behind.</div>';
-  html += '<div class="question">Your account and the other apps</div>';
-  html += '<div>Delivery Twin Violet (Inventory) and Delivery Twin Glaucous (Roads, first built as Chassisquiver) are separate apps that feed this map. The tabs under the title move between all three, and the same tabs sit at the top of the other two. Delivery Twin and Delivery Twin Violet share one Supabase project and one account, the same email and password, not any outside sign in service. Delivery Twin Glaucous runs on its own Supabase project with its own account, and this map reads the road runs shared there. The blue buttons under Other apps open the other two in a new page.</div>';
-  html += '<div class="question">Timeline</div>';
-  html += '<div>New in version 1.0.12. Timeline in the menu splits a day into half hour blocks. Each block says how many reports came in and from which phones, then sums up what happened: where you were parked and for how long, how far you drove, odometer readings, receipts and anything you logged. When two or three phones park at the same spot at the same time, the stop is kept once and lists every phone that saw it, so extra phones back each other up instead of piling up copies. Tap a line to open that entry.</div>';
-  html += '<div class="question">Battery saving with the motion sensor</div>';
-  html += '<div>New in version 1.0.11. GPS now runs only while you are moving. After five minutes parked inside sixty meters, Delivery Twin turns GPS off and waits on the phone\'s motion sensor, a low power chip that wakes it the moment the truck starts traveling. A cheap network location check every ten minutes backs that up. Stops, departure times and odometer prompts work the same. Tap the blue dot to see whether tracking is moving or parked.</div>';
-  html += '<div class="question">Your phones on the map, and home</div>';
-  html += '<div>New in version 1.0.10. Every phone signed in to your account shows on the map as a round pin in that phone\'s color, so you can see where each phone was last. Pick each phone\'s color under Settings. A phone reports its spot every two minutes while Delivery Twin is open on it. Tap a pin to see how long ago it reported, and pins older than an hour fade. Under Settings, Set home here saves home as a two hundred meter circle that all your phones share. Inside it, parked stops are not logged and odometer prompts wait until you leave.</div>';
-  html += '<div class="question">GPS calibration from your odometer readings</div>';
-  html += '<div>New in version 1.0.7. In the phone app, GPS keeps its own running mile count. Each odometer reading you save is treated as a fact: the app compares how far the odometer went since the last reading with how far GPS counted, and learns a correction from the last twenty stretches, weighted by miles. Every new reading becomes the new starting point, so GPS error never builds up past one stretch. The odometer form shows what GPS expects, and asks for a second tap when a reading is lower than the last one or far from the estimate, so a typo cannot teach it a wrong fact. The status line after saving shows the stretch and the new correction. The Day log shows raw and corrected GPS miles, auto stops record an estimated odometer on arrival, and tapping the blue dot shows the estimated odometer right now. GPS counting starts with this version, so the first correction appears after two readings with driving between them.</div>';
-  html += '<div class="question">One sign in for all three apps</div>';
-  html += '<div>New in version 1.0.6. The sign in screen under Account and profile has a check box for each app: Teal, the map, Violet, the inventory, and Glaucous, the roads. Check the ones you want and sign in once with your email and password. Violet signs in as soon as the Inventory tab opens, and Glaucous signs in the next time you tap Roads. If you are already signed in here, Account and profile has a Sign the other two in box that does the same with one password. Signing out here signs the checked apps out too. Glaucous keeps its own accounts, so it needs the same email and password as this app.</div>';
+  html += '<div>A map and logbook for delivery drivers on any gig app. It runs in the browser and as an Android app, and everything saves to your Delivery Twin account. Nothing is shared with Field Twin.</div>';
+  html += '<div class="question">Offers</div>';
+  html += '<div>Tap Offer on the bottom bar each time an app sends you an offer. Pick the app, type the pay, miles and minutes, then tap Accepted or Declined. Time and location save on their own. The Offers tab shows pay per mile and per hour, for today and by app.</div>';
+  html += '<div class="question">Spots</div>';
+  html += '<div>Every known restaurant, fast food place, cafe, bar and liquor store shows as the same small gray square. Tap one and choose Got a delivery here to uncover it, which fills in its name, address, phone, hours and drive-thru. Uncovered food spots turn green and liquor spots turn purple. Add spot puts a place on the map that is not there yet.</div>';
+  html += '<div class="question">Deliveries and delivery lines</div>';
+  html += '<div>Got a delivery here starts a delivery and shows a bar at the top. Tap Dropped off when you hand the order over and the dropoff spot is saved. Tap an uncovered spot and choose Delivery lines to see a straight line from it to every dropoff you made from there. Dropoffs are private to you.</div>';
+  html += '<div class="question">Logging a stop</div>';
+  html += '<div>Log saves where you are with the kind of place. House, Apartment complex, High-rise apartments, Gated community and Hotel ask what the next driver needs to know: where orders get left, gates and codes, elevators, front desk rules, parking and extra time past the door.</div>';
+  html += '<div class="question">Inventory</div>';
+  html += '<div>The Inventory tab is Delivery Twin\'s own inventory, kept apart from Field Twin\'s.</div>';
+  html += '<div class="question">Driver Chat</div>';
+  html += '<div>Driver Chat is private to Delivery Twin drivers and runs on Delivery Twin\'s own database, apart from every other chat. Join with an invite code from a member, and members can make codes with the Invite code button. With Driver Chat alerts on, a new message from someone else flashes the screen in rainbow colors for a moment.</div>';
+  html += '<div class="question">Receipts and miles</div>';
+  html += '<div>Receipt reads a photo of a receipt and files it under its printed date. Spend lists what you paid, and Mileage adds up your driving by day.</div>';
   html += '<div class="question">Sync</div>';
-  html += '<div>Signed in, everything saves to your account and matches across phones, deletes included. Account and profile shows the counts, your points and trophies, and where to set a password. Without an account, entries stay on this phone for thirty days, and Export and Import move them by file.</div>';
+  html += '<div>Signed in, everything saves to your Delivery Twin account and matches across phones. Without an account, entries stay on this phone for thirty days.</div>';
   html += '<div class="panel-actions"><button class="secondary" id="closeInfoBtn">Close</button></div>';
   panel.innerHTML = html;
   panel.scrollTop = 0;
@@ -6303,7 +6320,7 @@ window.deliveryTwinReady = init();
 })();
 </script>
 <script>
-// Twin tabs: Field map is this app, Inventory is Delivery Twin Violet loaded in place so switching never leaves the page.
+// Tabs: Map is this app, Inventory is Delivery Twin Inventory loaded in place so switching never leaves the page.
 (function () {
   const TAB_KEY = 'deliveryTwinTab';
   const teal = document.getElementById('tabTeal');
@@ -6316,7 +6333,7 @@ window.deliveryTwinReady = init();
     if (inv && !view.firstChild) {
       const f = document.createElement('iframe');
       f.src = VIOLET_SITE;
-      f.title = 'Delivery Twin Violet inventory';
+      f.title = 'Delivery Twin Inventory';
       f.allow = 'camera; clipboard-write; geolocation';
       view.appendChild(f);
     }
@@ -7734,7 +7751,7 @@ async function ftOsmLockers() {
 }
 setTimeout(() => { setToggle('teamLockersBtn', ftTeamOn); if (ftTeamOn) ftTeamSync().then(ftLockerPins); }, 3000);
 
-// FT Companion: the dashboard screen board. When linked, it gets the route and turns, its GPS takes over from the
+// Companion: the dashboard screen board. When linked, it gets the route and turns, its GPS takes over from the
 // phone's for following the route, and its road roughness readings are saved with where they were measured.
 let ftcOn = false, ftcState = 'off', ftcPos = null, ftcRoad = [];
 try { ftcOn = localStorage.getItem('ftcOn') === '1'; ftcRoad = JSON.parse(localStorage.getItem('ftcRoad') || '[]') || []; } catch (e) {}
@@ -7742,7 +7759,7 @@ function ftcNative() { return window.DeliveryTwinNative && typeof window.Deliver
 function ftcText() {
   const el = document.getElementById('companionText');
   if (!el) return;
-  const words = { off: 'Off.', asking: 'Waiting for Bluetooth permission.', searching: 'Looking for FT Companion.', connecting: 'Connecting.', linked: 'Linked.', lost: 'Link lost, looking again.', 'not found': 'Not found yet, still looking.', 'bluetooth off': 'Bluetooth is off on this phone.', 'no permission': 'Bluetooth permission was not allowed.', 'scan failed': 'Search failed, trying again.', 'wrong device': 'Found a device that is not FT Companion.' };
+  const words = { off: 'Off.', asking: 'Waiting for Bluetooth permission.', searching: 'Looking for Companion.', connecting: 'Connecting.', linked: 'Linked.', lost: 'Link lost, looking again.', 'not found': 'Not found yet, still looking.', 'bluetooth off': 'Bluetooth is off on this phone.', 'no permission': 'Bluetooth permission was not allowed.', 'scan failed': 'Search failed, trying again.', 'wrong device': 'Found a device that is not Companion.' };
   el.textContent = (words[ftcState] || ftcState) + (ftcPos && Date.now() - ftcPos.t < 5000 ? ' Using its GPS.' : '') + (ftcRoad.length ? ' Road readings saved: ' + ftcRoad.length + '.' : '');
 }
 function ftcSet(on) {
@@ -7830,7 +7847,7 @@ window.ftCompanionIn = function (kind, text) {
     ftcState = text;
     ftcText();
     if (text === 'linked' && was !== 'linked') {
-      setStatus('FT Companion linked');
+      setStatus('Companion linked');
       ftcSendLockers();
       ftcStreetsAt = null;
       ftcSendStreets(true);
@@ -7886,44 +7903,33 @@ setTimeout(() => {
   if (ftcOn && ftcNative()) ftcSet(true);
 }, 3500);
 
-// Field Chat: a room inside the Cat Command Chat backend, shared members, names and invites, its own messages
-// (room field). With alerts on, a message from someone else flashes the screen in rainbow colors for a moment,
-// on the full map, the floating window and the companion screen alike. No sound and no text pops up.
-const FC_URL = 'https://vogxdikogfaxhwcgajfg.supabase.co';
-const FC_KEY = 'sb_publishable_b9N7M8W5NpGgsus1ZUQgaw_3QQBxFm1';
-let fc = null, fcUser = null, fcMember = false, fcChan = null, fcMsgs = [], fcNames = {}, fcAlerts = false, fcUnread = 0;
-try { fcAlerts = localStorage.getItem('fcAlerts') === '1'; } catch (e) {}
-function fcClient() {
-  if (!fc && window.supabase) fc = window.supabase.createClient(FC_URL, FC_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: 'fieldchat-auth' } });
-  return fc;
-}
+// Driver Chat: Delivery Twin's own private chat, on Delivery Twin's own database tables, signed in with the
+// same account as the rest of Delivery Twin. It shares nothing with Cat Command Chat or Field Twin.
+// With alerts on, a message from someone else flashes the screen in rainbow colors for a moment.
+let fcMember = false, fcChan = null, fcMsgs = [], fcNames = {}, fcAlerts = false, fcUnread = 0;
+try { fcAlerts = localStorage.getItem('dtChatAlerts') === '1'; } catch (e) {}
 async function fcStart() {
-  const c = fcClient();
-  if (!c) return false;
+  if (!(sb && cloudUser)) return false;
   try {
-    let s = (await c.auth.getSession()).data.session;
-    if (!s) { const r = await c.auth.signInAnonymously(); s = r.data && r.data.session; }
-    if (!s) return false;
-    fcUser = s.user;
-    const mem = await c.from('chat_members').select('joined_at').eq('user_id', fcUser.id).maybeSingle();
-    fcMember = !!(mem.data);
+    const r = await sb.rpc('dt_chat_member');
+    fcMember = r.data === true;
     if (fcMember) { await fcLoadNames(); fcListen(); }
     return true;
   } catch (e) { return false; }
 }
 async function fcLoadNames() {
-  try { const n = await fc.from('chat_names').select('id,name,color'); (n.data || []).forEach(x => { fcNames[x.id] = x; }); } catch (e) {}
+  try { const n = await sb.from('delivery_twin_chat_names').select('id,name,color'); (n.data || []).forEach(x => { fcNames[x.id] = x; }); } catch (e) {}
 }
-function fcName(id) { return id === (fcUser && fcUser.id) ? 'You' : ((fcNames[id] && fcNames[id].name) || 'Someone'); }
+function fcName(id) { return id === (cloudUser && cloudUser.id) ? 'You' : ((fcNames[id] && fcNames[id].name) || 'Someone'); }
 function fcListen() {
-  if (fcChan || !fc) return;
-  fcChan = fc.channel('field-room')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: 'room=eq.field' }, p => {
+  if (fcChan || !sb) return;
+  fcChan = sb.channel('delivery-twin-chat')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'delivery_twin_chat_messages' }, p => {
       const m = p.new;
       if (!m || fcMsgs.some(x => x.id === m.id)) return;
       fcMsgs.push(m);
       if (!fcNames[m.sender]) fcLoadNames();
-      const mine = fcUser && m.sender === fcUser.id;
+      const mine = cloudUser && m.sender === cloudUser.id;
       const open = document.getElementById('fcList');
       if (open) fcDraw(); else if (!mine) { fcUnread++; fcBadge(); }
       if (!mine && fcAlerts) fcFlash();
@@ -7937,32 +7943,32 @@ function fcFlash() {
   d.id = 'fcStar';
   document.body.appendChild(d);
   setTimeout(() => d.remove(), 1300);
-  if (typeof ftcSend === 'function') ftcSend('F');
 }
 function fcBadge() {
   const b = document.getElementById('fieldChatOpen');
-  if (b) b.textContent = fcUnread ? 'Open Field Chat (' + fcUnread + ' new)' : 'Open Field Chat';
+  if (b) b.textContent = fcUnread ? 'Open Driver Chat (' + fcUnread + ' new)' : 'Open Driver Chat';
 }
 async function fcSetAlerts(on) {
   fcAlerts = on;
-  try { localStorage.setItem('fcAlerts', on ? '1' : '0'); } catch (e) {}
+  try { localStorage.setItem('dtChatAlerts', on ? '1' : '0'); } catch (e) {}
   setToggle('fieldChatBtn', on);
-  if (on) { await fcStart(); if (!fcMember) setStatus('open Field Chat once to join with an invite code'); }
+  if (on) { await fcStart(); if (!fcMember) setStatus('open Driver Chat once to join with an invite code'); }
 }
 function fcDraw() {
   const list = document.getElementById('fcList');
   if (!list) return;
-  list.innerHTML = fcMsgs.slice(-80).map(m => '<div class="fc-msg' + (fcUser && m.sender === fcUser.id ? ' mine' : '') + '"><b>' + escapeHtml(fcName(m.sender)) + '</b> <span class="meta-line">' + new Date(m.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '</span><br>' + escapeHtml(m.body || (m.file_name ? 'shared a file' : '')) + '</div>').join('') || '<div class="meta-line">No messages yet.</div>';
+  list.innerHTML = fcMsgs.filter(m => !m.deleted_at).slice(-80).map(m => '<div class="fc-msg' + (cloudUser && m.sender === cloudUser.id ? ' mine' : '') + '"><b>' + escapeHtml(fcName(m.sender)) + '</b> <span class="meta-line">' + new Date(m.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '</span><div>' + escapeHtml(m.body) + '</div></div>').join('') || '<div class="meta-line">No messages yet.</div>';
   list.scrollTop = list.scrollHeight;
 }
 async function fcOpen() {
   const panel = document.getElementById('panel');
-  panel.innerHTML = '<h2>Field Chat</h2><div class="meta-line" id="fcMsg">Connecting.</div>';
+  panel.innerHTML = '<h2>Driver Chat</h2><div class="meta-line" id="fcMsg">Connecting.</div>';
   panel.classList.add('open');
+  if (!(sb && cloudUser)) { document.getElementById('fcMsg').textContent = 'Sign in to Delivery Twin first, under Account and profile.'; return; }
   if (!(await fcStart())) { document.getElementById('fcMsg').textContent = 'Could not reach the chat. Check the signal and try again.'; return; }
   fcUnread = 0; fcBadge();
   if (!fcMember) {
-    panel.innerHTML = '<h2>Field Chat</h2><div class="meta-line">Field Chat shares members with Cat Command Chat. Get an invite code from someone in it, or make one yourself in Cat Command Chat by tapping your own face, then Invite someone.</div>' +
+    panel.innerHTML = '<h2>Driver Chat</h2><div class="meta-line">Driver Chat is private to Delivery Twin drivers. Ask a member for an invite code.</div>' +
       '<input type="text" id="fcCode" autocomplete="off" placeholder="Invite code"><input type="text" id="fcNameIn" autocomplete="off" placeholder="Your name in the chat">' +
       '<div class="meta-line" id="fcErr"></div><div class="panel-actions"><button id="fcJoin">Join</button><button class="secondary" id="fcClose">Close</button></div>';
     document.getElementById('fcClose').addEventListener('click', closePanel);
@@ -7972,9 +7978,9 @@ async function fcOpen() {
       const err = document.getElementById('fcErr');
       if (!code || !name) { err.textContent = 'Type the invite code and your name.'; return; }
       err.textContent = 'Joining.';
-      const r = await fc.rpc('join_chat', { code: code });
+      const r = await sb.rpc('dt_chat_join', { code: code });
       if (r.error || r.data !== true) { err.textContent = 'That code did not work. Check it with the person who invited you.'; return; }
-      await fc.from('chat_names').upsert({ id: fcUser.id, name: name, color: '#0b4ea2' });
+      await sb.from('delivery_twin_chat_names').upsert({ id: cloudUser.id, name: name, color: '#0b4ea2' });
       fcMember = true;
       await fcLoadNames();
       fcListen();
@@ -7982,22 +7988,28 @@ async function fcOpen() {
     });
     return;
   }
-  panel.innerHTML = '<h2>Field Chat</h2><div id="fcList" style="max-height:46vh;overflow-y:auto;margin:6px 0;"></div>' +
-    '<textarea id="fcText" rows="2" placeholder="Message the field crew"></textarea>' +
-    '<div class="panel-actions"><button id="fcSend">Send</button><button class="secondary" id="fcClose">Close</button></div>';
+  panel.innerHTML = '<h2>Driver Chat</h2><div id="fcList" style="max-height:46vh;overflow-y:auto;margin:6px 0;"></div>' +
+    '<textarea id="fcText" rows="2" placeholder="Message the other drivers"></textarea>' +
+    '<div class="panel-actions"><button id="fcSend">Send</button><button class="secondary" id="fcInvite">Invite code</button><button class="secondary" id="fcClose">Close</button></div>' +
+    '<div class="meta-line" id="fcInviteOut"></div>';
   document.getElementById('fcClose').addEventListener('click', closePanel);
+  document.getElementById('fcInvite').addEventListener('click', async () => {
+    const out = document.getElementById('fcInviteOut');
+    const r = await sb.rpc('dt_chat_invite', { p_max_uses: 1, p_days: 7 });
+    out.textContent = r.error ? 'Could not make a code, ' + r.error.message : 'Invite code, good for one person for seven days: ' + r.data;
+  });
   const send = async () => {
     const t = document.getElementById('fcText');
     const body = t.value.trim();
     if (!body) return;
     t.value = '';
-    const r = await fc.from('chat_messages').insert({ body: body, room: 'field' }).select().single();
+    const r = await sb.from('delivery_twin_chat_messages').insert({ body: body }).select().single();
     if (r.error) { t.value = body; setStatus('message did not send, ' + r.error.message); return; }
     if (r.data && !fcMsgs.some(x => x.id === r.data.id)) { fcMsgs.push(r.data); fcDraw(); }
   };
   document.getElementById('fcSend').addEventListener('click', send);
   try {
-    const r = await fc.from('chat_messages').select('*').eq('room', 'field').is('deleted_at', null).order('id', { ascending: false }).limit(80);
+    const r = await sb.from('delivery_twin_chat_messages').select('*').is('deleted_at', null).order('id', { ascending: false }).limit(80);
     if (!r.error) fcMsgs = (r.data || []).reverse();
   } catch (e) {}
   fcDraw();
