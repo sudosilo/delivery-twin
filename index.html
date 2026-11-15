@@ -5517,7 +5517,7 @@ function showInfo() {
   html += '<div class="question">Inventory</div>';
   html += '<div>The Inventory tab is Delivery Twin\'s own inventory, kept apart from Field Twin\'s.</div>';
   html += '<div class="question">Driver Chat</div>';
-  html += '<div>Driver Chat is private to Delivery Twin drivers and runs on Delivery Twin\'s own database, apart from every other chat. Join with an invite code from a member, and members can make codes with the Invite code button. With Driver Chat alerts on, a new message from someone else flashes the screen in rainbow colors for a moment.</div>';
+  html += '<div>Driver Chat is the same chat as Field Chat in Field Twin, so both apps talk to each other, and it never reaches Cat Command Chat. Join with an invite code from a member, and members can make codes with the Invite code button. With Driver Chat alerts on, a new message from someone else flashes the screen in rainbow colors for a moment.</div>';
   html += '<div class="question">Receipts and miles</div>';
   html += '<div>Receipt reads a photo of a receipt and files it under its printed date. Spend lists what you paid, and Mileage adds up your driving by day.</div>';
   html += '<div class="question">Sync</div>';
@@ -7903,28 +7903,28 @@ setTimeout(() => {
   if (ftcOn && ftcNative()) ftcSet(true);
 }, 3500);
 
-// Driver Chat: Delivery Twin's own private chat, on Delivery Twin's own database tables, signed in with the
-// same account as the rest of Delivery Twin. It shares nothing with Cat Command Chat or Field Twin.
+// Driver Chat: the chat shared by Delivery Twin and Field Twin (Field Chat there), on the twin_chat tables, signed in with the
+// same account as the rest of Delivery Twin. Nothing reaches Cat Command Chat.
 // With alerts on, a message from someone else flashes the screen in rainbow colors for a moment.
 let fcMember = false, fcChan = null, fcMsgs = [], fcNames = {}, fcAlerts = false, fcUnread = 0;
 try { fcAlerts = localStorage.getItem('dtChatAlerts') === '1'; } catch (e) {}
 async function fcStart() {
   if (!(sb && cloudUser)) return false;
   try {
-    const r = await sb.rpc('dt_chat_member');
+    const r = await sb.rpc('twin_chat_member');
     fcMember = r.data === true;
     if (fcMember) { await fcLoadNames(); fcListen(); }
     return true;
   } catch (e) { return false; }
 }
 async function fcLoadNames() {
-  try { const n = await sb.from('delivery_twin_chat_names').select('id,name,color'); (n.data || []).forEach(x => { fcNames[x.id] = x; }); } catch (e) {}
+  try { const n = await sb.from('twin_chat_names').select('id,name,color'); (n.data || []).forEach(x => { fcNames[x.id] = x; }); } catch (e) {}
 }
 function fcName(id) { return id === (cloudUser && cloudUser.id) ? 'You' : ((fcNames[id] && fcNames[id].name) || 'Someone'); }
 function fcListen() {
   if (fcChan || !sb) return;
-  fcChan = sb.channel('delivery-twin-chat')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'delivery_twin_chat_messages' }, p => {
+  fcChan = sb.channel('twin-chat')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'twin_chat_messages' }, p => {
       const m = p.new;
       if (!m || fcMsgs.some(x => x.id === m.id)) return;
       fcMsgs.push(m);
@@ -7968,7 +7968,7 @@ async function fcOpen() {
   if (!(await fcStart())) { document.getElementById('fcMsg').textContent = 'Could not reach the chat. Check the signal and try again.'; return; }
   fcUnread = 0; fcBadge();
   if (!fcMember) {
-    panel.innerHTML = '<h2>Driver Chat</h2><div class="meta-line">Driver Chat is private to Delivery Twin drivers. Ask a member for an invite code.</div>' +
+    panel.innerHTML = '<h2>Driver Chat</h2><div class="meta-line">Driver Chat is shared by Delivery Twin and Field Twin and nothing else. Ask a member for an invite code.</div>' +
       '<input type="text" id="fcCode" autocomplete="off" placeholder="Invite code"><input type="text" id="fcNameIn" autocomplete="off" placeholder="Your name in the chat">' +
       '<div class="meta-line" id="fcErr"></div><div class="panel-actions"><button id="fcJoin">Join</button><button class="secondary" id="fcClose">Close</button></div>';
     document.getElementById('fcClose').addEventListener('click', closePanel);
@@ -7978,9 +7978,9 @@ async function fcOpen() {
       const err = document.getElementById('fcErr');
       if (!code || !name) { err.textContent = 'Type the invite code and your name.'; return; }
       err.textContent = 'Joining.';
-      const r = await sb.rpc('dt_chat_join', { code: code });
+      const r = await sb.rpc('twin_chat_join', { code: code });
       if (r.error || r.data !== true) { err.textContent = 'That code did not work. Check it with the person who invited you.'; return; }
-      await sb.from('delivery_twin_chat_names').upsert({ id: cloudUser.id, name: name, color: '#0b4ea2' });
+      await sb.from('twin_chat_names').upsert({ id: cloudUser.id, name: name, color: '#0b4ea2' });
       fcMember = true;
       await fcLoadNames();
       fcListen();
@@ -7995,7 +7995,7 @@ async function fcOpen() {
   document.getElementById('fcClose').addEventListener('click', closePanel);
   document.getElementById('fcInvite').addEventListener('click', async () => {
     const out = document.getElementById('fcInviteOut');
-    const r = await sb.rpc('dt_chat_invite', { p_max_uses: 1, p_days: 7 });
+    const r = await sb.rpc('twin_chat_invite', { p_max_uses: 1, p_days: 7 });
     out.textContent = r.error ? 'Could not make a code, ' + r.error.message : 'Invite code, good for one person for seven days: ' + r.data;
   });
   const send = async () => {
@@ -8003,13 +8003,13 @@ async function fcOpen() {
     const body = t.value.trim();
     if (!body) return;
     t.value = '';
-    const r = await sb.from('delivery_twin_chat_messages').insert({ body: body }).select().single();
+    const r = await sb.from('twin_chat_messages').insert({ body: body }).select().single();
     if (r.error) { t.value = body; setStatus('message did not send, ' + r.error.message); return; }
     if (r.data && !fcMsgs.some(x => x.id === r.data.id)) { fcMsgs.push(r.data); fcDraw(); }
   };
   document.getElementById('fcSend').addEventListener('click', send);
   try {
-    const r = await sb.from('delivery_twin_chat_messages').select('*').is('deleted_at', null).order('id', { ascending: false }).limit(80);
+    const r = await sb.from('twin_chat_messages').select('*').is('deleted_at', null).order('id', { ascending: false }).limit(80);
     if (!r.error) fcMsgs = (r.data || []).reverse();
   } catch (e) {}
   fcDraw();
