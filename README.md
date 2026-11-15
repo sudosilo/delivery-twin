@@ -6,6 +6,6 @@ A map shows logged entries. Delivery Twin has its own data tables, an offer logg
 
 Live at delivery-twin.vercel.app.
 
-Latest change. 2026-11-13, v2026.11.13. Added fog of war spots, then pickups, dropoffs, and delivery lines on the map. Lockers are now hidden, the color key folds away, and there is a link to Field Dispatch. Delivery Twin now has its own inventory app, and an Offers tab replaces Roads.
+Latest change. 2026-11-14, v2026.11.14. Added Driver Chat, which runs on its own backend and now shares the twin chat with Field Twin. Field Twin wording was removed from the app. Dropoff places now have kinds, the companion is hidden, and there is a new Delivery Twin app icon.
 
 Full history is in CHANGELOG.md.
