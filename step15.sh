@@ -1,3 +1,0 @@
-set -e
-cd ~/delivery-twin
-sed -i -e "s|^  <h3>Games</h3>$|  <h3>Site surveys</h3>\n  <button class=\"secondary\" id=\"rtssBtn\" onclick=\"window.open('https://rtss-sigma.vercel.app/', '_blank', 'noopener')\">RTSS, technology site survey</button>\n  <button class=\"secondary\" id=\"rdssBtn\" onclick=\"window.open('https://ghost-kitchen-builder.vercel.app/', '_blank', 'noopener')\">RDSS, design and setup survey</button>\n&|" -e "s|dtSpotLines(s).join('<br>') + btn + dtLinesBtn(s) + '</div>'|dtSpotLines(s).join('<br>') + btn + dtLinesBtn(s) + '<button class=\"secondary\" onclick=\"window.open(\\\\'https://rtss-sigma.vercel.app/\\\\', \\\\'_blank\\\\', \\\\'noopener\\\\')\" style=\"margin-top:6px;\">Survey in RTSS</button>' + '</div>'|" index.html

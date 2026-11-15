@@ -944,6 +944,9 @@
     <button class="secondary" id="camKeyBtn">Service address</button>
     <button class="secondary" id="checkBtn">Service check</button>
   </div>
+  <h3>Site surveys</h3>
+  <button class="secondary" id="rtssBtn" onclick="window.open('https://rtss-sigma.vercel.app/', '_blank', 'noopener')">RTSS, technology site survey</button>
+  <button class="secondary" id="rdssBtn" onclick="window.open('https://ghost-kitchen-builder.vercel.app/', '_blank', 'noopener')">RDSS, design and setup survey</button>
   <h3>Games</h3>
   <button class="secondary" id="fieldDispatchBtn" onclick="window.open('https://2026-11-04-field-dispatch.vercel.app/', '_blank', 'noopener')">Field Dispatch</button>
   <h3>Map</h3>
@@ -4884,7 +4887,7 @@ async function dtSpotTap(d, m) {
   const btn = s.source === 'added' && s.user_id === cloudUser.id
     ? '<button class="secondary" data-dtedit="' + escapeHtml(s.id) + '" style="margin-top:6px;">Edit</button>'
     : '<button class="secondary" data-dtgot="' + escapeHtml(s.id) + '" style="margin-top:6px;">Another delivery here</button>';
-  m.bindPopup('<div style="font-size:14px;line-height:1.4;">' + dtSpotLines(s).join('<br>') + btn + dtLinesBtn(s) + '</div>').openPopup();
+  m.bindPopup('<div style="font-size:14px;line-height:1.4;">' + dtSpotLines(s).join('<br>') + btn + dtLinesBtn(s) + '<button class="secondary" onclick="window.open(\'https://rtss-sigma.vercel.app/\', \'_blank\', \'noopener\')" style="margin-top:6px;">Survey in RTSS</button>' + '</div>').openPopup();
 }
 
 async function dtReveal(id) {
