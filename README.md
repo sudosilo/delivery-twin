@@ -6,6 +6,6 @@ A map shows logged entries. Delivery Twin has its own data tables, an offer logg
 
 Live at delivery-twin.vercel.app.
 
-Latest change. 2026-11-15, v2026.11.15. Added direction chevrons on the delivery lines. Added links that open the RTSS and RDSS site surveys.
+Latest change. 2026-11-16, v2026.11.16. You can now log from a spot. Dropoff pins can be dragged, and spots have links to rewards.
 
 Full history is in CHANGELOG.md.
